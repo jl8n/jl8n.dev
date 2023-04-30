@@ -1,43 +1,105 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
-<article>
-    ERRA has made a name for themselves on their own terms. Determination and steadfast dedication have defined ERRA’s path, forging a unique connection with an ever-growing audience, without the advantages of traditional recognition. Titanic riffs and enchanting melodies litter the cerebral, immersive soundscapes powering each of the progressive metal merchant’s albums, culminating in a career-defining fifth, boldly titled ERRA.
+<script>
+    import profile from "$lib/images/pfp.webp";
+</script>
 
-New songs like “Snowblood,” “House of Glass,” “Divisionary,” and “Shadow Autonomous” conjure the crushing heaviness and soaring melodic might of fan-favorite anthems like “Breach,” “Skyline,” and “Eye of God,” while broadening the band’s reach with meditative expansiveness, trippy near-psychedelia, and haunting hooks.
+<section>
+    <div class="left">
+        <img src={profile} alt="Welcome" style="width: 250px;" />
+        <h1>Hi, I'm Josh</h1>
+    </div>
+    <div class="right">
+        <article>
+            <h2>Welcome to my portfolio.</h2>
+    
+            <p>
+                I'm primarily a full stack developer, but my interests span
+                everything from embedded sytems to dev-ops.
+            </p>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Condimentum lacinia quis vel eros donec. Egestas fringilla phasellus faucibus scelerisque eleifend donec pretium vulputate sapien. Massa tincidunt dui ut ornare lectus sit amet. Rhoncus est pellentesque elit ullamcorper dignissim cras tincidunt lobortis feugiat. Malesuada proin libero nunc consequat interdum varius sit. Ornare suspendisse sed nisi lacus sed. Aliquam faucibus purus in massa tempor nec. Phasellus faucibus scelerisque eleifend donec pretium. At elementum eu facilisis sed odio morbi. Praesent elementum facilisis leo vel fringilla est.
+                Duis at consectetur lorem donec massa sapien faucibus et. Tortor condimentum lacinia quis vel eros donec. Ultrices gravida dictum fusce ut placerat orci nulla pellentesque dignissim. Sed vulputate mi sit amet. Leo vel orci porta non pulvinar neque. Eu ultrices vitae auctor eu augue ut lectus arcu bibendum. Purus semper eget duis at tellus. Augue neque gravida in fermentum et sollicitudin ac orci. Pharetra sit amet aliquam id diam maecenas ultricies mi eget. Ac tortor vitae purus faucibus ornare. Interdum velit laoreet id donec. Dictum non consectetur a erat nam at lectus. Libero justo laoreet sit amet cursus sit amet dictum sit. Amet volutpat consequat mauris nunc congue nisi vitae suscipit tellus.
+            </p>
+        </article>
 
-ERRA was recorded, mixed, and mastered by Carson Slovak and Grant McFarland, the Grammy-nominated duo responsible for essential records from August Burns Red and From Ashes To New. It’s a definitive mission statement for guitarist/vocalist Jesse Cash, vocalist J.T. Cavey, drummer Alex Ballew, bassist Conor Hesse, and guitarist Sean Price, each of them already well-respected players revered for their inspiring technicality and raw, natural talent.
+        
+        <article>
+            <h3>Languages</h3>
+            <ul>
+                <li>c++</li>
+                <li>javascript</li>
+                <li>typescript</li>
+                <li>python</li>
 
-The decision to self-title the album suits the themes of self-reflection and confrontation woven throughout the record’s mesmerizing 12-songs. Previous ERRA albums Impulse (2012), Augment (2013), Drift (2016), and Neon (2018) saw the band spotlighted on tastemaker playlists, as the band’s Spotify plays soared past 72 million.
+            </ul>
 
-“It’s clearly an evolution of the same band, it sounds like a record we wrote, but it’s such a big step forward from the last one that it seemed like the perfect time to self-title a record,” CaSH explains. “People who have been following ERRA, we wanted to give them the sense that we’re starting a new chapter, with something fresh.”
+            <h5>Learning</h5>
+            <ul>
+                <li>rust</li>
+                <li>go</li>
+                <li>shell</li>
+            </ul>
 
-Cavey concurs. “We’ve always tried to have a balance of classic song structures, intertwined with experimental adventures,” he says. “This album especially is music written for musicians that also appeals to the masses. There are a lot more breakdowns on this record, but also bigger melodies. I put a lot of focus on simplifying what I’m doing, personally, to make the songs more memorable. The most important thing was to write music we enjoy.”
+            <h3>Frameworks</h3>
+            <ul>
+                <li>vue</li>
+                <li>svelte</li>
+                <li>node</li>
+                <li>express</li>
+                <li>InfluxDB</li>
+                <li>mysql</li>
+            </ul>
 
-Facebook groups and hashtags organized around the band’s dense music and heady but relatable lyrics have helped further the ERRA mission, resulting in multiple No. 1 Heatseekers placements on Billboard. ERRA has toured the world with Dance Gavin Dance, August Burns Red, TesseracT, and The Acacia Strain, among others. It all resulted in a worldwide audience devoted to the Alabama based band’s catalog, eager for each new missive.
+            <h3>Technologies</h3>
+            <ul>
+                <li>linux</li>
+                <li>dev-ops</li>
+                <li>docker</li>
+                <li>CI/CD</li>
+                <li>git</li>
+                <li>security</li>
+            </ul>
+        </article>
+    </div>
 
-ERRA confronts depression, anxiety, and desperation throughout their new album. They take listeners on a near-out-of-body journey to the infamous Suicide Forest of Japan; into episodic storytelling that would make Black Mirror writers proud; and into the literary works Cormac McCarthy and playright/filmmaker David Mamet.
 
-“I was going through a tough time, after a breakup, when Andy Glass from We Came As Romans turned me on to Eckhart Tolle,” Cash shares. “A lot of the information really seemed to stick. Many of the songs talk about being present, being conscious, without sounding forced or contrived, or like standard optimistic metalcore cliches.”
-
-The album opens with a vivid picture of horror in “Snowblood.” “Divisionary” draws a disturbing parallel between technology and religion. “House of Glass” touches on self-harm, zealousness, and reconciling with the loss of an abandoned ideology. There is a duality in “Shadow Autonomous.” Physics, vices, cultural divides, and even the tale of two lovers can be found elsewhere on ERRA. (The majority of the album’s lyrics were penned by primary songwriter Cash, with JT handling all of “Eidolon.”) “Memory Fiction” is inspired by Cash’s favorite Cormac McCarthy quote: “He thought each memory recalled must do some violence to its origins. As in a party game. Say the words and pass it on. So be sparing. What you alter in the remembering has yet a reality, known or not.”
-
-The down-tuned atmosphere of Deftones and Tool are central ingredients, alongside the inventiveness of Nine Inch Nails and the urgency of Northlane and Architects. The melodic side of the band often draws favorable comparisons to Circa Survive and Saosin. All of these components are filtered through ERRA’s unique sensibility and experience, resulting in a singular creative identity both warmly familiar and refreshingly forward-thinking.
-
-“Most of our fans know that I wasn’t completely happy with our last record. I wanted it to be better,” Cash admits. “I was struggling to get through it, a bit. Being in the right headspace this time around was just huge. It changed everything. Making this record was just fun. There was no real stress involved in it for us. It was a blast.”
-
-“By nature, ERRA’s music is going to be different than most metalcore bands, because we are still pretty damn complicated,” Cavey adds, with a laugh. “These songs are still not easy to play. But we put less pressure on ourselves to be crazy [technical]. I made sure a lot of moments on this new album are just cool and catchy.”
-
-As their music finds the balance between the crushingly heavy and the headily melodic, its members seek to find harmony between the needs of the individual and the natural flow of this shared reality. ERRA, as a band of brothers and creative force, strive to live in alignment with the present moment. ERRA, the album, represents redemption for the band, who emerged from the creative process with renewed focus and confidence, of certainty and self. ERRA is part mild-altering substance, part meditation, reveling in each musical moment of exultation.
-</article>
+</section>
 
 <style>
+    h1, h2, h3, h5 {
+        margin: 0px;
+    }
+
+    section {
+        display: flex;
+        gap: 10px;
+    }
+
+    section > .left {
+        width: 250px;
+        font-size: 5em;
+        text-align: justify;
+    }
+
+    section > .right {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
     article {
-        font-size: 1.2em;
+        font-size: 0.9em;
         color: white;
         width: 400px;
         height: 50vh;
         overflow: auto;
-        white-space: normal;
         text-align: justify;
+    }
+
+    ul {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        list-style: none;
+        margin: 0px;
     }
 </style>
