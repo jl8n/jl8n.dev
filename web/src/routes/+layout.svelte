@@ -3,7 +3,7 @@
   import { page } from "$app/stores";
   import profile from "$lib/images/pfp.webp";
 
-  let promise = fetch("http://localhost:3000/external");
+  let promise = fetch("http://localhost:3000/");
   let album: string;
   let artist: string;
   let track: string;
@@ -11,9 +11,9 @@
   onMount(async () => {
     const res = await promise;
     const resData = await res.json();
-    album = resData.album;
-    artist = resData.artist;
-    track = resData.track;
+    album = resData.Album;
+    artist = resData.Artist;
+    track = resData.Track;
   });
 </script>
 
@@ -33,6 +33,11 @@
       >
       <a
         href="/rooms"
+        aria-current={$page.url.pathname === "/data" ? "page" : undefined}
+        >Projects</a
+      >
+      <a
+        href="/rooms"
         aria-current={$page.url.pathname === "/music" ? "page" : undefined}
         >Music</a
       >
@@ -41,11 +46,7 @@
         aria-current={$page.url.pathname === "/data" ? "page" : undefined}
         >Data</a
       >
-      <a
-        href="/rooms"
-        aria-current={$page.url.pathname === "/data" ? "page" : undefined}
-        >About This Site</a
-      >
+
     </nav>
 
     <div class="now-playing">
@@ -60,7 +61,7 @@
             <p>{track}</p>
             <p>{artist} &middot; {album}</p>
           {:catch error}
-            <p>Something went wrong: {error.message}</p>
+            <p>Something went wrong</p>
           {/await}
         </div>
       </div>
