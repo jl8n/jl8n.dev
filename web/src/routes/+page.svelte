@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import profile from "$lib/images/pfp.webp";
 </script>
 
@@ -10,18 +10,38 @@
     <div class="right">
         <article>
             <h2>Welcome to my portfolio.</h2>
-    
+
             <p>
                 I'm primarily a full stack developer, but my interests span
                 everything from embedded sytems to dev-ops.
             </p>
             <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Condimentum lacinia quis vel eros donec. Egestas fringilla phasellus faucibus scelerisque eleifend donec pretium vulputate sapien. Massa tincidunt dui ut ornare lectus sit amet. Rhoncus est pellentesque elit ullamcorper dignissim cras tincidunt lobortis feugiat. Malesuada proin libero nunc consequat interdum varius sit. Ornare suspendisse sed nisi lacus sed. Aliquam faucibus purus in massa tempor nec. Phasellus faucibus scelerisque eleifend donec pretium. At elementum eu facilisis sed odio morbi. Praesent elementum facilisis leo vel fringilla est.
-                Duis at consectetur lorem donec massa sapien faucibus et. Tortor condimentum lacinia quis vel eros donec. Ultrices gravida dictum fusce ut placerat orci nulla pellentesque dignissim. Sed vulputate mi sit amet. Leo vel orci porta non pulvinar neque. Eu ultrices vitae auctor eu augue ut lectus arcu bibendum. Purus semper eget duis at tellus. Augue neque gravida in fermentum et sollicitudin ac orci. Pharetra sit amet aliquam id diam maecenas ultricies mi eget. Ac tortor vitae purus faucibus ornare. Interdum velit laoreet id donec. Dictum non consectetur a erat nam at lectus. Libero justo laoreet sit amet cursus sit amet dictum sit. Amet volutpat consequat mauris nunc congue nisi vitae suscipit tellus.
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                Condimentum lacinia quis vel eros donec. Egestas fringilla
+                phasellus faucibus scelerisque eleifend donec pretium vulputate
+                sapien. Massa tincidunt dui ut ornare lectus sit amet. Rhoncus
+                est pellentesque elit ullamcorper dignissim cras tincidunt
+                lobortis feugiat. Malesuada proin libero nunc consequat interdum
+                varius sit. Ornare suspendisse sed nisi lacus sed. Aliquam
+                faucibus purus in massa tempor nec. Phasellus faucibus
+                scelerisque eleifend donec pretium. At elementum eu facilisis
+                sed odio morbi. Praesent elementum facilisis leo vel fringilla
+                est. Duis at consectetur lorem donec massa sapien faucibus et.
+                Tortor condimentum lacinia quis vel eros donec. Ultrices gravida
+                dictum fusce ut placerat orci nulla pellentesque dignissim. Sed
+                vulputate mi sit amet. Leo vel orci porta non pulvinar neque. Eu
+                ultrices vitae auctor eu augue ut lectus arcu bibendum. Purus
+                semper eget duis at tellus. Augue neque gravida in fermentum et
+                sollicitudin ac orci. Pharetra sit amet aliquam id diam maecenas
+                ultricies mi eget. Ac tortor vitae purus faucibus ornare.
+                Interdum velit laoreet id donec. Dictum non consectetur a erat
+                nam at lectus. Libero justo laoreet sit amet cursus sit amet
+                dictum sit. Amet volutpat consequat mauris nunc congue nisi
+                vitae suscipit tellus.
             </p>
         </article>
 
-        
         <article>
             <h3>Languages</h3>
             <ul>
@@ -29,7 +49,6 @@
                 <li>javascript</li>
                 <li>typescript</li>
                 <li>python</li>
-
             </ul>
 
             <h5>Learning</h5>
@@ -60,12 +79,13 @@
             </ul>
         </article>
     </div>
-
-
 </section>
 
 <style>
-    h1, h2, h3, h5 {
+    h1,
+    h2,
+    h3,
+    h5 {
         margin: 0px;
     }
 

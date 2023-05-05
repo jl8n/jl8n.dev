@@ -21,7 +21,7 @@ var listenbrainz_token, listenbrainz_user string
 func init() {
 	err := godotenv.Load()
 	if err != nil {
-		// handle error
+		log.Fatal("Error loading environment variables: ", err)
 	}
 
 	token := os.Getenv("LISTENBRAINZ_API_TOKEN")
@@ -48,36 +48,73 @@ func main() {
 
 		req, err := http.NewRequest("GET", url, nil)
 		if err != nil {
-			// handle error
+			log.Println("Error creating HTTP request: ", err)
+			http.Error(w, "Error creating HTTP request", http.StatusInternalServerError)
+			return
 		}
 
 		req.Header.Set("Authorization", fmt.Sprintf("Token %s", listenbrainz_token))
 		res, err := client.Do(req) // send the request
 		if err != nil {
-			// handle error
+			log.Println("Error sending HTTP request: ", err)
+			http.Error(w, "Error sending `Now Playing` request", http.StatusInternalServerError)
+			return
 		}
 
 		body, readErr := io.ReadAll(res.Body)
 		if readErr != nil {
-			log.Fatal(readErr)
+			log.Println("Error reading HTTP response body: ", readErr)
+			http.Error(w, "Error reading `Now Playing` response", http.StatusInternalServerError)
+			return
 		}
 
 		svc1 := structs.ListenbrainzResponse{}
 		jsonErr := json.Unmarshal(body, &svc1)
 		if jsonErr != nil {
-			log.Fatal(jsonErr)
+			log.Println("Error unmarshaling JSON response: ", jsonErr)
+			http.Error(w, "Error parsing `Now Playing` response", http.StatusInternalServerError)
+			return
 		}
 
-		res1 := structs.NowPlaying{
-			Artist: svc1.Payload.Listens[0].TrackMetadata.ArtistName,
-			Album:  svc1.Payload.Listens[0].TrackMetadata.ReleaseName,
-			Track:  svc1.Payload.Listens[0].TrackMetadata.TrackName,
+		if len(svc1.Payload.Listens) > 0 {
+			res1 := structs.NowPlaying{
+				Artist: svc1.Payload.Listens[0].TrackMetadata.ArtistName,
+				Album:  svc1.Payload.Listens[0].TrackMetadata.ReleaseName,
+				Track:  svc1.Payload.Listens[0].TrackMetadata.TrackName,
+			}
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusCreated)
+			json.NewEncoder(w).Encode(res1)
+		} else {
+			http.Error(w, "No data returned by API", http.StatusInternalServerError)
 		}
-
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusCreated)
-		json.NewEncoder(w).Encode(res1)
 	})
 
+	r.Get("/listens", func(w http.ResponseWriter, r *http.Request) {
+		client := &http.Client{}
+		url := fmt.Sprintf("https://api.listenbrainz.org/1/user/%s/playing-now", listenbrainz_user)
+
+		req, err := http.NewRequest("GET", url, nil)
+		if err != nil {
+			log.Println("Error creating HTTP request: ", err)
+			http.Error(w, "Error creating HTTP request", http.StatusInternalServerError)
+			return
+		}
+
+		req.Header.Set("Authorization", fmt.Sprintf("Token %s", listenbrainz_token))
+		res, err := client.Do(req) // send the request
+		if err != nil {
+			log.Println("Error sending HTTP request: ", err)
+			http.Error(w, "Error sending `Now Playing` request", http.StatusInternalServerError)
+			return
+		}
+
+		body, readErr := io.ReadAll(res.Body)
+		if readErr != nil {
+			log.Println("Error reading HTTP response body: ", readErr)
+			http.Error(w, "Error reading `Now Playing` response", http.StatusInternalServerError)
+			return
+		}
+	})
 	http.ListenAndServe(":3000", r)
 }
