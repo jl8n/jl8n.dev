@@ -67,6 +67,7 @@ func main() {
 
 		if isReleaseExists(ctx, &res1) {
 			fmt.Println("release exists", res1)
+			res1.ArtAvailable = true
 			sendResponse(w, res1)
 			return
 		}
@@ -103,6 +104,7 @@ func main() {
 			// could not add release to MongoDB
 			// only effect of this is slower subsequent
 		}
+		res1.ArtAvailable = true
 
 		sendResponse(w, res1)
 	})

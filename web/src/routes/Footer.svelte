@@ -4,7 +4,7 @@
     import type { NowPlaying } from "./+layout";
 
     export let data: NowPlaying;
-    const { Artist, Album, Track } = data;
+    const { Artist, Album, Track, Art, ArtAvailable } = data;
 </script>
 
 <footer>
@@ -36,7 +36,7 @@
     <div class="now-playing">
         <div class="foo">
             <div class="album-art">
-                <img src={profile} alt="Welcome" />
+                <img src={Art} alt="Welcome" />
             </div>
             <div class="track-info">
                 <div class="track">{Track}</div>

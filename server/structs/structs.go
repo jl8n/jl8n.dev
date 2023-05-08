@@ -3,10 +3,11 @@ package structs
 import "time"
 
 type NowPlaying struct {
-	Artist    string
-	Album     string
-	Track     string
-	AlbumMBID string
+	Artist       string
+	Album        string
+	Track        string
+	AlbumMBID    string
+	ArtAvailable bool
 }
 
 type Release struct {
