@@ -7,7 +7,12 @@ type NowPlaying struct {
 	Album     string
 	Track     string
 	AlbumMBID string
-	Coverart  string
+}
+
+type Release struct {
+	ID     string `bson:"_id"` // MBID
+	Name   string
+	Artist string
 }
 
 type LBPlayingNow struct {
@@ -146,21 +151,21 @@ type MBAlbumInfo struct {
 		ID                 string `json:"id"`
 		Score              int    `json:"score"`
 		StatusID           string `json:"status-id"`
-		PackagingID        string `json:"packaging-id"`
 		Count              int    `json:"count"`
 		Title              string `json:"title"`
 		Status             string `json:"status"`
-		Packaging          string `json:"packaging"`
+		Disambiguation     string `json:"disambiguation,omitempty"`
 		TextRepresentation struct {
 			Language string `json:"language"`
 			Script   string `json:"script"`
-		} `json:"text-representation"`
+		} `json:"text-representation,omitempty"`
 		ArtistCredit []struct {
 			Name   string `json:"name"`
 			Artist struct {
-				ID       string `json:"id"`
-				Name     string `json:"name"`
-				SortName string `json:"sort-name"`
+				ID             string `json:"id"`
+				Name           string `json:"name"`
+				SortName       string `json:"sort-name"`
+				Disambiguation string `json:"disambiguation"`
 			} `json:"artist"`
 		} `json:"artist-credit"`
 		ReleaseGroup struct {
@@ -170,8 +175,8 @@ type MBAlbumInfo struct {
 			Title         string `json:"title"`
 			PrimaryType   string `json:"primary-type"`
 		} `json:"release-group"`
-		Date          string `json:"date"`
-		Country       string `json:"country"`
+		Date          string `json:"date,omitempty"`
+		Country       string `json:"country,omitempty"`
 		ReleaseEvents []struct {
 			Date string `json:"date"`
 			Area struct {
@@ -180,36 +185,38 @@ type MBAlbumInfo struct {
 				SortName      string   `json:"sort-name"`
 				Iso31661Codes []string `json:"iso-3166-1-codes"`
 			} `json:"area"`
-		} `json:"release-events"`
-		Barcode   string `json:"barcode"`
-		Asin      string `json:"asin"`
+		} `json:"release-events,omitempty"`
 		LabelInfo []struct {
 			Label struct {
 				ID   string `json:"id"`
 				Name string `json:"name"`
 			} `json:"label"`
-		} `json:"label-info"`
+		} `json:"label-info,omitempty"`
 		TrackCount int `json:"track-count"`
 		Media      []struct {
 			Format     string `json:"format"`
 			DiscCount  int    `json:"disc-count"`
 			TrackCount int    `json:"track-count"`
 		} `json:"media"`
-		Tags []struct {
+		PackagingID string `json:"packaging-id,omitempty"`
+		Packaging   string `json:"packaging,omitempty"`
+		Barcode     string `json:"barcode,omitempty"`
+		Asin        string `json:"asin,omitempty"`
+		Tags        []struct {
 			Count int    `json:"count"`
 			Name  string `json:"name"`
-		} `json:"tags"`
+		} `json:"tags,omitempty"`
 	} `json:"releases"`
 }
 
 type CoverartArchive struct {
 	Images []struct {
-		Approved   bool   `json:"approved"`
-		Back       bool   `json:"back"`
-		Comment    string `json:"comment"`
-		Edit       int    `json:"edit"`
-		Front      bool   `json:"front"`
-		ID         int64  `json:"id"`
+		Approved bool   `json:"approved"`
+		Back     bool   `json:"back"`
+		Comment  string `json:"comment"`
+		Edit     int    `json:"edit"`
+		Front    bool   `json:"front"`
+		//ID         string `json:"id"`
 		Image      string `json:"image"`
 		Thumbnails struct {
 			Num250  string `json:"250"`
