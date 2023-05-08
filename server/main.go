@@ -76,6 +76,7 @@ func main() {
 
 		foundMBID, err := getAlbumMBID(w, &res1) // add album mbid to NowPlaying{}
 		if err != nil {
+			fmt.Println(err)
 			sendResponse(w, res1)
 			return
 		}
@@ -127,7 +128,7 @@ func main() {
 
 func sendResponse(w http.ResponseWriter, res structs.NowPlaying) {
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusCreated)
+	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(res)
 }
 

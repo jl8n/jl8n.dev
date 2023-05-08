@@ -38,18 +38,18 @@ func getNowPlaying(w http.ResponseWriter, nowPlaying *structs.NowPlaying) {
 		return
 	}
 
-	svc1 := structs.LBPlayingNow{}
-	jsonErr := json.Unmarshal(body, &svc1)
+	sbResponse := structs.LBPlayingNow{}
+	jsonErr := json.Unmarshal(body, &sbResponse)
 	if jsonErr != nil {
 		log.Println("Error unmarshaling JSON response: ", jsonErr)
 		http.Error(w, "Error parsing `Now Playing` response", http.StatusInternalServerError)
 		return
 	}
 
-	if len(svc1.Payload.Listens) > 0 {
-		nowPlaying.Artist = svc1.Payload.Listens[0].TrackMetadata.ArtistName
-		nowPlaying.Album = svc1.Payload.Listens[0].TrackMetadata.ReleaseName
-		nowPlaying.Track = svc1.Payload.Listens[0].TrackMetadata.TrackName
+	if len(sbResponse.Payload.Listens) > 0 {
+		nowPlaying.Artist = sbResponse.Payload.Listens[0].TrackMetadata.ArtistName
+		nowPlaying.Album = sbResponse.Payload.Listens[0].TrackMetadata.ReleaseName
+		nowPlaying.Track = sbResponse.Payload.Listens[0].TrackMetadata.TrackName
 	} else {
 		// no song currently playing
 		w.WriteHeader(http.StatusNoContent)
@@ -61,7 +61,7 @@ func getAlbumMBID(w http.ResponseWriter, nowPlaying *structs.NowPlaying) (string
 	fmt.Println("GET Album MBID...")
 	client := &http.Client{}
 	// TODO: this looks bad
-	apiURL := "http://musicbrainz.org/ws/2/release/?query=artist:\"" + url.QueryEscape(nowPlaying.Artist) + "\"%20AND%20release:\"" + url.QueryEscape(nowPlaying.Album) + "\"&fmt=json&limit=5"
+	apiURL := "http://musicbrainz.org/ws/2/release/?query=artist:" + url.QueryEscape(nowPlaying.Artist) + "%20AND%20release:" + url.QueryEscape(nowPlaying.Album) + "&fmt=json&limit=5"
 
 	req, err := http.NewRequest("GET", apiURL, nil)
 	if err != nil {
@@ -94,20 +94,35 @@ func getAlbumMBID(w http.ResponseWriter, nowPlaying *structs.NowPlaying) (string
 		return "", err
 	}
 
+	fmt.Println(4, apiURL)
+
 	if len(mbResponse.Releases) > 0 {
+
 		for _, release := range mbResponse.Releases {
-			if strings.ToLower(release.Title) == strings.ToLower(nowPlaying.Album) &&
-				strings.ToLower(release.ArtistCredit[0].Name) == strings.ToLower(nowPlaying.Artist) &&
-				strings.ToLower(release.ReleaseGroup.PrimaryType) == "album" &&
-				strings.ToLower(release.Disambiguation) == "" {
+			// TODO: REGEX, better var name
+			one, two := strings.TrimSpace(strings.ToLower(release.Title)), strings.TrimSpace(strings.ToLower(nowPlaying.Album))
+			one, two = strings.ReplaceAll(one, ",", ""), strings.ReplaceAll(two, ",", "")
+			one, two = strings.ReplaceAll(one, "'", ""), strings.ReplaceAll(two, "'", "")
+			one, two = strings.ReplaceAll(one, "’", ""), strings.ReplaceAll(two, "’", "")
+
+			isTitleSame := one == two
+			isArtistSame := strings.ToLower(release.ArtistCredit[0].Name) == strings.ToLower(nowPlaying.Artist)
+			isAlbum := strings.ToLower(release.ReleaseGroup.PrimaryType) == "album" ||
+				strings.ToLower(release.ReleaseGroup.PrimaryType) == "ep" ||
+				strings.ToLower(release.ReleaseGroup.PrimaryType) == "single"
+			isNotDisambig := strings.ToLower(release.Disambiguation) == ""
+
+			fmt.Println(isTitleSame, isArtistSame, isAlbum, isNotDisambig, release.ReleaseGroup.PrimaryType)
+
+			if isTitleSame && isArtistSame && isAlbum && isNotDisambig {
+				fmt.Println("Best match:", release.ID)
 
 				return release.ID, nil
 			}
 		}
 	}
 
-	w.WriteHeader(http.StatusNoContent)
-	return "", errors.New("Album not found while searching MusicBrainz")
+	return "", errors.New("Suitable match not found while searching MusicBrainz")
 }
 
 func getCoverArtURL(w http.ResponseWriter, nowPlaying *structs.NowPlaying) (string, error) {
