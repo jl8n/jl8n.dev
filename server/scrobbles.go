@@ -60,10 +60,20 @@ func getNowPlaying(w http.ResponseWriter, nowPlaying *structs.NowPlaying) {
 func getAlbumMBID(w http.ResponseWriter, nowPlaying *structs.NowPlaying) (string, error) {
 	fmt.Println("GET Album MBID...")
 	client := &http.Client{}
-	// TODO: this looks bad
-	apiURL := "http://musicbrainz.org/ws/2/release/?query=artist:" + url.QueryEscape(nowPlaying.Artist) + "%20AND%20release:" + url.QueryEscape(nowPlaying.Album) + "&fmt=json&limit=5"
 
-	req, err := http.NewRequest("GET", apiURL, nil)
+	// Construct URL
+	query := fmt.Sprintf("artist:%s AND release:%s", nowPlaying.Artist, nowPlaying.Album)
+	params := fmt.Sprintf("query=%s&fmt=json&limit=5", url.QueryEscape(query))
+	apiURL := url.URL{
+		Scheme:   "http",
+		Host:     "musicbrainz.org",
+		Path:     "ws/2/release/",
+		RawQuery: params,
+	}
+
+	fmt.Println("mbURL:", apiURL.String())
+
+	req, err := http.NewRequest("GET", apiURL.String(), nil)
 	if err != nil {
 		log.Println("Error creating HTTP request: ", err)
 		http.Error(w, "Error creating HTTP request", http.StatusInternalServerError)
@@ -98,7 +108,11 @@ func getAlbumMBID(w http.ResponseWriter, nowPlaying *structs.NowPlaying) (string
 
 	if len(mbResponse.Releases) > 0 {
 
-		for _, release := range mbResponse.Releases {
+		releasesCount := len(mbResponse.Releases)
+		weights := make([]int, releasesCount)
+
+		// create score for each
+		for i, release := range mbResponse.Releases {
 			// TODO: REGEX, better var name
 			one, two := strings.TrimSpace(strings.ToLower(release.Title)), strings.TrimSpace(strings.ToLower(nowPlaying.Album))
 			one, two = strings.ReplaceAll(one, ",", ""), strings.ReplaceAll(two, ",", "")
@@ -111,15 +125,42 @@ func getAlbumMBID(w http.ResponseWriter, nowPlaying *structs.NowPlaying) (string
 				strings.ToLower(release.ReleaseGroup.PrimaryType) == "ep" ||
 				strings.ToLower(release.ReleaseGroup.PrimaryType) == "single"
 			isNotDisambig := strings.ToLower(release.Disambiguation) == ""
+			isOfficial := release.Status == "Official"
+			//isDigital := release.Media[0].Format == "Digital Media"
+			isPhysical := release.Media[0].Format == "Album"
 
-			fmt.Println(isTitleSame, isArtistSame, isAlbum, isNotDisambig, release.ReleaseGroup.PrimaryType)
+			fmt.Println(isTitleSame, isArtistSame, isAlbum, isNotDisambig, isOfficial, isAlbum)
 
-			if isTitleSame && isArtistSame && isAlbum && isNotDisambig {
-				fmt.Println("Best match:", release.ID)
+			for _, val := range []bool{isTitleSame, isArtistSame, isAlbum, isNotDisambig, isOfficial, isPhysical} {
+				if val {
+					weights[i]++
+				}
+			}
 
-				return release.ID, nil
+			// if isTitleSame && isArtistSame && isAlbum && isNotDisambig && isOfficial && isMedia {
+			// 	fmt.Println("Best match:", release.ID)
+
+			// 	// TODO: check if album-art can be fetched here
+			// 	// if not, then move to the next album
+
+			// }
+		}
+
+		winnerIndex := 0
+		largest := 0
+
+		for i, candidate := range weights {
+			if candidate > largest {
+				largest = candidate
+				winnerIndex = i
 			}
 		}
+
+		fmt.Println("winner", winnerIndex, mbResponse.Releases[winnerIndex].ID)
+
+		return mbResponse.Releases[winnerIndex].ID, nil
+		//return release.ID, nil
+
 	}
 
 	return "", errors.New("Suitable match not found while searching MusicBrainz")
