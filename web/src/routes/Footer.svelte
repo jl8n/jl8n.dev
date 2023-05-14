@@ -66,6 +66,7 @@
         margin: 0px 25px;
         position: sticky;
         bottom: 0px;
+        background-color: black;
     }
 
     footer > nav {

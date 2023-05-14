@@ -32,7 +32,6 @@ export async function load({ fetch }) {
     }
 
 
-
     if (data.ArtAvailable && data.AlbumMBID) {
         const params = `filename=${encodeURIComponent(data.AlbumMBID)}`
         const res2 = await fetch('http://localhost:3000/albumart?' + params);

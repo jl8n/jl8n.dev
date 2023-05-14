@@ -1,29 +1,25 @@
 <script lang="ts">
+    import album from "$lib/images/album.jpg";
 </script>
 
 <div class="grid">
     <h1>Music</h1>
-    <div class="foo">
-        <ul class="masonry">
-            <li class="masonry-brick">foo</li>
-            <li class="masonry-brick">foo</li>
-            <li class="masonry-brick">foo</li>
-            <li class="masonry-brick">foo</li>
-            <li class="masonry-brick">foo</li>
-            <li class="masonry-brick">foo</li>
-        </ul>
+    <div class="wall">
+        {#each { length: 50 } as _, i}
+            <div class="brick">
+                <img src={album} alt="Album" />
+            </div>
+        {/each}
     </div>
 </div>
 
-<style>
+<style lang="scss">
     .grid {
-        display: grid;
-        grid-template-rows: 100px 1fr;
         height: 100%;
         width: 100%;
     }
 
-    .masonry {
+    .wall {
         display: grid;
         grid-auto-flow: dense;
         grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
@@ -31,20 +27,22 @@
         align-items: center;
         background-size: cover;
         object-fit: cover;
-        gap: 10px;
     }
 
-    .masonry > li {
-        list-style: none;
-        background-color: bisque;
-        height: 200px;
-        width: 200px;
-        margin: 1;
-    }
+    .brick {
+        img {
+            max-width: 100%;
+            height: 100%;
+        }
 
-    .masonry-brick {
-        object-fit: cover;
-        height: inherit;
-        max-width: 100%;
+        &:nth-of-type(3n) {
+            grid-row: span 2;
+            grid-column: span 2;
+        }
+
+        &:nth-of-type(9n) {
+            grid-row: span 3;
+            grid-column: span 3;
+        }
     }
 </style>
