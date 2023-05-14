@@ -34,15 +34,21 @@
     </nav>
 
     <div class="now-playing">
-        <div class="foo">
-            <div class="album-art">
-                <img src={Art} alt="Welcome" />
+        {#if Track}
+            <div class="foo">
+                {#if ArtAvailable}
+                    <div class="album-art">
+                        <img src={Art} alt="Welcome" />
+                    </div>
+                {/if}
+                <div class="track-info">
+                    <div class="track">{Track}</div>
+                    <div>{Artist} &bull; {Album}</div>
+                </div>
             </div>
-            <div class="track-info">
-                <div class="track">{Track}</div>
-                <div>{Artist} &bull; {Album}</div>
-            </div>
-        </div>
+        {:else}
+            <div>Josh is currently not listening to music</div>
+        {/if}
     </div>
 
     <ul class="links">

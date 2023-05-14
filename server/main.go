@@ -27,7 +27,6 @@ import (
 )
 
 var lbToken, lbUser string
-var lastfmToken, lastfmUser string
 
 func init() {
 	err := godotenv.Load()
@@ -37,10 +36,7 @@ func init() {
 
 	listenbrainz_token := os.Getenv("LISTENBRAINZ_API_TOKEN")
 	listenbrainz_user := os.Getenv("LISTENBRAINZ_USER")
-	lastfm_token := os.Getenv("LASTFM_API_TOKEN")
-	lastfm_user := os.Getenv("LASTFM_USER")
 	lbToken, lbUser = listenbrainz_token, listenbrainz_user
-	lastfmToken, lastfmUser = lastfm_token, lastfm_user
 }
 
 func main() {
@@ -59,13 +55,23 @@ func main() {
 
 		res1 := structs.NowPlaying{}
 		fmt.Println("GET Artist, Album, Track")
-		getNowPlaying(w, &res1) // add artist, album, and track to NowPlaying{}
+		res1, err := getNowPlaying(w) // add artist, album, and track to NowPlaying{}
+		if err != nil {
+			http.Error(w, "Error creating HTTP request", http.StatusInternalServerError)
+			return
+		}
 
-		// create context to ensure that isReleaseExists() doesn't time out
+		if res1 == (structs.NowPlaying{}) {
+			// no song playing
+			w.WriteHeader(http.StatusNoContent)
+			return
+		}
+
+		// create context to ensure that isReleaseSavedInDB() doesn't time out
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
 
-		if isReleaseExists(ctx, &res1) {
+		if isReleaseSavedInDB(ctx, &res1) {
 			fmt.Println("release exists", res1)
 			res1.ArtAvailable = true
 			sendResponse(w, res1)
@@ -132,7 +138,7 @@ func sendResponse(w http.ResponseWriter, res structs.NowPlaying) {
 	json.NewEncoder(w).Encode(res)
 }
 
-func isReleaseExists(ctx context.Context, nowPlaying *structs.NowPlaying) bool {
+func isReleaseSavedInDB(ctx context.Context, nowPlaying *structs.NowPlaying) bool {
 	// Set client options
 	clientOptions := options.Client().ApplyURI("mongodb://root:example@localhost:27017")
 
@@ -218,33 +224,33 @@ func getFilenameFromURL(rawURL string) (string, error) {
 func downloadAlbumArt(artURL string) error {
 	filename, err := getFilenameFromURL(artURL)
 	if err != nil {
-		return errors.New("Could not use MBID as filename")
+		return errors.New("could not use MBID as filename")
 	}
 
 	// Create the directory if it doesn't exist
 	err = os.MkdirAll("album-art", 0755)
 	if err != nil {
-		return errors.New("Could not create directory")
+		return errors.New("could not create directory")
 	}
 
 	// Create the empty file on the filesystem
 	out, err := os.Create(filepath.Join("album-art", filename))
 	if err != nil {
-		return errors.New("Could not create empty file on filesystem")
+		return errors.New("could not create empty file on filesystem")
 	}
 	defer out.Close()
 
 	// Get the data
 	resp, err := http.Get(artURL)
 	if err != nil {
-		return errors.New("Could not download album art data")
+		return errors.New("could not download album art data")
 	}
 	defer resp.Body.Close()
 
 	// Write the body to file
 	_, err = io.Copy(out, resp.Body)
 	if err != nil {
-		return errors.New("Could not write album art data to file")
+		return errors.New("could not write album art data to file")
 	}
 
 	return nil
