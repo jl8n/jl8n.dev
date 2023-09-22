@@ -18,6 +18,11 @@ jobs:
         with:
           gpg_private_key: ${{ secrets.GIT_SECRET_KEY }}
         id: import_gpg_key
+      
+      - name: 🔑 Prepare Git Secrets
+        run: | 
+          sudo apt-get update -qq && sudo apt-get install -qq -y git-secret
+          git secret reveal || { echo "Error running git secret reveal"; exit 1; }
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
@@ -51,8 +56,8 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v5.0.0
         with:
-          context: .
+          context: ./server
           push: true
           tags: ghcr.io/${{ github.repository }}/jl8n.dev-server:latest
