@@ -5,6 +5,9 @@ on: push
 jobs:
   Build-Web:
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
     defaults:
       run:
         shell: bash
