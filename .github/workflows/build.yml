@@ -22,7 +22,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
-          context: .
+          context: ./web
           push: true
           tags: ghcr.io/${{ github.repository }}/jl8n.dev-web:latest
 
