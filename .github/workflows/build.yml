@@ -13,13 +13,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Decrypt secrets
+      - name: 🔑 Prepare Git Secrets
         run: |
-          echo "${{ secrets.GIT_SECRET_KEY }}" > secretkey.asc
-          gpg --import --batch secretkey.asc
-          git secret reveal
-        env:
-          SECRETS_DIR: src/lib/images
+          sudo apt-get update -qq && sudo apt-get install -qq -y git-secret
+          echo "${{ secrets.GIT_SECRET_KEY }}" > $HOME/private.gpg
+          gpg --import $HOME/private.gpg || { echo "Error importing GPG key"; exit 1; }
+          git secret reveal || { echo "Error running git secret reveal"; exit 1; }
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
