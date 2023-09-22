@@ -26,11 +26,11 @@
                 ? "page"
                 : undefined}>Listens</a
         >
-        <a
+        <!-- <a
             href="/rooms"
             aria-current={$page.url.pathname === "/data" ? "page" : undefined}
             >Data</a
-        >
+        > -->
     </nav>
 
     <div class="now-playing">

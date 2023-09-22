@@ -1,3 +1,5 @@
+export const prerender = true;  // adapter-static
+
 export type NowPlaying = {
     Artist?: string;
     Album?: string;
@@ -8,10 +10,17 @@ export type NowPlaying = {
 };
 
 export async function load({ fetch }) {
-    const res = await fetch('http://localhost:3000/');
+    let res;
+    try {
+        res = await fetch('http://localhost:3000/');
+    } catch (error) {
+        console.error(`Fetch failed: ${error}`);
+        return;
+    }
 
     if (!res.ok) {
-        throw new Error(`An error occurred: ${res.status}`);
+        console.error(`An error occurred: ${res.status}`);
+        return;
     } else if (res.status == 204) {
         return {} as NowPlaying
     }
@@ -31,15 +40,21 @@ export async function load({ fetch }) {
         console.error(e);
     }
 
-
     if (data.ArtAvailable && data.AlbumMBID) {
-        const params = `filename=${encodeURIComponent(data.AlbumMBID)}`
-        const res2 = await fetch('http://localhost:3000/albumart?' + params);
-        const blob = await res2.blob()
+        const params = `filename=${encodeURIComponent(data.AlbumMBID)}`;
+        let res2;
+        try {
+            res2 = await fetch('http://localhost:3000/albumart?' + params);
+        } catch (error) {
+            console.error(`Fetch failed: ${error}`);
+            return;
+        }
+        
+        const blob = await res2.blob();
         data.Art = URL.createObjectURL(blob);
     }
 
-    console.log('final data', data)
+    console.log('final data', data);
 
-    return data
+    return data;
 }

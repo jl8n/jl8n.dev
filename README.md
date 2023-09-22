@@ -1,6 +1,6 @@
 # jl8n.dev
 
-A webapp that showcases my development capabilities.
+A webapp to showcase some of my development capabilities using some of my favorite technologies and languages.
 
 This project is a work in progress.
 

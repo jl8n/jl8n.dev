@@ -19,6 +19,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
+	"github.com/gorilla/websocket"
 	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -39,6 +40,11 @@ func init() {
 	lbToken, lbUser = listenbrainz_token, listenbrainz_user
 }
 
+var upgrader = websocket.Upgrader{
+	ReadBufferSize:  1024,
+	WriteBufferSize: 1024,
+}
+
 func main() {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
@@ -50,6 +56,26 @@ func main() {
 		AllowCredentials: true,
 		MaxAge:           300, // Maximum value not ignored by any of major browsers
 	}))
+
+	r.Get("/ws", func(w http.ResponseWriter, r *http.Request) {
+		conn, err := upgrader.Upgrade(w, r, nil)
+		if err != nil {
+			// handle error
+		}
+
+		for {
+			messageType, p, err := conn.ReadMessage()
+			if err != nil {
+				// handle error
+			}
+
+			fmt.Println("messageType", messageType)
+
+			if err := conn.WriteMessage(messageType, p); err != nil {
+				// handle error
+			}
+		}
+	})
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 
@@ -185,9 +211,10 @@ func addToMongo(nowPlaying *structs.NowPlaying) error {
 	}
 
 	// Attempt to establish a connection or timeout
+	fmt.Println("\nattempting to connect")
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel() // Release resources associated with the context
-
+	fmt.Println("\nsome shit")
 	err = client.Connect(ctx)
 	if err != nil {
 		return err
@@ -203,6 +230,7 @@ func addToMongo(nowPlaying *structs.NowPlaying) error {
 
 	// Insert document into collection
 	result, err := coll.InsertOne(context.TODO(), doc)
+	fmt.Println("\ndid not insert")
 	if err != nil {
 		return err
 	}
