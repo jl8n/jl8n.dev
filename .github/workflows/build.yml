@@ -16,9 +16,10 @@ jobs:
       - name: 🔑 Prepare Git Secrets
         run: |
           sudo apt-get update -qq && sudo apt-get install -qq -y git-secret
+          export GPG_TTY=$(tty)
           echo "${{ secrets.GIT_SECRET_KEY }}" > $HOME/private.gpg
           cat $HOME/private.gpg
-          export GPG_TTY=$(tty)
+          
           gpg --import $HOME/private.gpg || { echo "Error importing GPG key"; exit 1; }
           
           git secret reveal || { echo "Error running git secret reveal"; exit 1; }
