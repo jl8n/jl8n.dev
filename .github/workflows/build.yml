@@ -17,7 +17,7 @@ jobs:
         run: |
           echo "${{ secrets.GIT_SECRET_KEY }}" > secretkey.asc
           gpg --import --batch secretkey.asc
-          git-secret reveal
+          git secret reveal
         env:
           SECRETS_DIR: src/lib/images
 
