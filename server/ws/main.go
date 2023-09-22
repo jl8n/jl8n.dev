@@ -23,7 +23,7 @@ func reader(conn *websocket.Conn) {
 		messageType, p, err := conn.ReadMessage()
 		if err != nil {
 			log.Println(err)
-			return
+			return 
 		}
 
 		log.Println(string(p))
