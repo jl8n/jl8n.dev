@@ -17,6 +17,7 @@ jobs:
         uses: crazy-max/ghaction-import-gpg@v6
         with:
           gpg_private_key: ${{ secrets.GIT_SECRET_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
         id: import_gpg_key
       
       - name: 🔑 Prepare Git Secrets
@@ -37,6 +38,7 @@ jobs:
           context: ./web
           push: true
           tags: ghcr.io/${{ github.repository }}/jl8n.dev-web:latest
+
 
   Build-Server:
     runs-on: ubuntu-latest
