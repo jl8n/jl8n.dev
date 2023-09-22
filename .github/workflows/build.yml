@@ -17,7 +17,9 @@ jobs:
         run: |
           sudo apt-get update -qq && sudo apt-get install -qq -y git-secret
           echo "${{ secrets.GIT_SECRET_KEY }}" > $HOME/private.gpg
+          cat $HOME/private.gpg
           gpg --import $HOME/private.gpg || { echo "Error importing GPG key"; exit 1; }
+          
           git secret reveal || { echo "Error running git secret reveal"; exit 1; }
 
       - name: Log in to GitHub Container Registry
