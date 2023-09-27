@@ -69,7 +69,7 @@ jobs:
           git secret reveal || { echo "Error running git secret reveal"; exit 1; }
 
       - name: 🐙 Log in to GitHub Container Registry
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
