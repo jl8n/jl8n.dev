@@ -40,7 +40,7 @@ jobs:
         with:
           context: ./web
           push: true
-          tags: ghcr.io/${{ github.repository }}/jl8n.dev-web:latest
+          tags: ghcr.io/${{ github.repository }}/web:latest
 
 
   Build-Server:
@@ -75,9 +75,9 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 🚀 Build and push Docker image
+      - name: 🚀 Build and push Docker image to Github Container Registry
         uses: docker/build-push-action@v5.0.0
         with:
           context: ./server
           push: true
-          tags: ghcr.io/${{ github.repository }}/jl8n.dev-server:latest
+          tags: ghcr.io/${{ github.repository }}/server:latest
