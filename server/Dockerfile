@@ -27,5 +27,4 @@ COPY --from=builder /app/.env .env
 
 EXPOSE 3000
 
-# Command to run the executable
 CMD ["./main"]  

@@ -155,6 +155,36 @@ func main() {
 		http.ServeFile(w, r, filepath)
 	})
 
+	r.Get("/events", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println("GET /events")
+		// Set the necessary headers for SSE
+		w.Header().Set("Content-Type", "text/event-stream")
+		w.Header().Set("Cache-Control", "no-cache")
+		w.Header().Set("Connection", "keep-alive")
+
+		// Create a channel to send messages to the client
+		messageChan := make(chan string)
+
+		go func() {
+			for {
+				time.Sleep(time.Second * 2)
+				messageChan <- time.Now().Format(time.RFC1123)
+			}
+		}()
+
+		for {
+			select {
+			case msg := <-messageChan:
+				fmt.Fprintf(w, "data: %s\n\n", msg)
+				if f, ok := w.(http.Flusher); ok {
+					f.Flush()
+				}
+			case <-r.Context().Done():
+				return
+			}
+		}
+	})
+
 	http.ListenAndServe(":3000", r)
 }
 
