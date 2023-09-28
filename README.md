@@ -3,6 +3,8 @@
 
 My personal developer webapp showcasing some of my development chops using some of my favorite technologies.
 
+The current build can be viewed at [jl8n.dev](https://jl8n.dev).
+
 ## 📚 Tech Stack
 
 ### Backend
