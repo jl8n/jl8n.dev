@@ -72,9 +72,12 @@ func main() {
 			flusher.Flush()
 			return
 		}
+
+		// send server-side events to the client
 		fmt.Fprintf(w, "event: Track\ndata: %s\n\n", nowPlaying.Track)
 		fmt.Fprintf(w, "event: Album\ndata: %s\n\n", nowPlaying.Album)
 		fmt.Fprintf(w, "event: Artist\ndata: %s\n\n", nowPlaying.Artist)
+
 		flusher.Flush()
 
 		time.Sleep(time.Second * 10)

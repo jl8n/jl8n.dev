@@ -59,7 +59,8 @@ func parseResponse(res *http.Response) (structs.NowPlaying, error) {
 func getCurrentlyPlayingSong() (structs.NowPlaying, error) {
 	apiURL := fmt.Sprintf("https://api.listenbrainz.org/1/user/%s/playing-now", lbUser)
 
-	res, err := sendRequest(apiURL)
+	res, _ := sendRequest(apiURL)
+
 
 	nowPlaying, err := parseResponse(res)
 	return nowPlaying, err

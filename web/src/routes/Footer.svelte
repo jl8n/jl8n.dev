@@ -1,10 +1,36 @@
 <script lang="ts">
     import { page } from "$app/stores";
-    import profile from "$lib/images/pfp.webp";
-    import type { NowPlaying } from "./+layout";
+    import { onMount } from "svelte";
+    let eventSource: EventSource;
 
-    export let data: NowPlaying;
-    const { Artist, Album, Track, Art, ArtAvailable } = data;
+    let track = "";
+    let album = "";
+    let artist = "";
+
+    function fetchData() {
+        eventSource = new EventSource("http://localhost:3000/nowplaying");
+
+        eventSource.addEventListener("Track", function (event) {
+            track = event.data;
+        });
+
+        eventSource.addEventListener("Album", function (event) {
+            album = event.data;
+        });
+
+        eventSource.addEventListener("Artist", function (event) {
+            artist = event.data;
+        });
+    }
+
+    onMount(() => {
+        fetchData();
+        return () => {
+            if (eventSource) {
+                eventSource.close();
+            }
+        };
+    });
 </script>
 
 <footer>
@@ -34,16 +60,16 @@
     </nav>
 
     <div class="now-playing">
-        {#if Track}
+        {#if track}
             <div class="foo">
-                {#if ArtAvailable}
+                <!-- {#if ArtAvailable}
                     <div class="album-art">
                         <img src={Art} alt="Welcome" />
                     </div>
-                {/if}
+                {/if} -->
                 <div class="track-info">
-                    <div class="track">{Track}</div>
-                    <div>{Artist} &bull; {Album}</div>
+                    <div class="track">{track}</div>
+                    <div>{artist} &bull; {album}</div>
                 </div>
             </div>
         {:else}
