@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+
+  jl8n.dev-web:
+    image: ghcr.io/jl8n/jl8n.dev/web:latest
+    container_name: jl8n.dev-web
+    ports:
+      - 3001:80
+
+  jl8n.dev-server:
+    image: ghcr.io/jl8n/jl8n.dev/server:latest
+    container_name: jl8n.dev-server
+    ports:
+      - 3000:3000

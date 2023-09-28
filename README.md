@@ -6,56 +6,51 @@ My personal developer webapp showcasing some of my development chops using some 
 ## 📚 Tech Stack
 
 ### Backend
-- **Go** 🐹
+- **Go**
   - Go-chi API: Server-side events and HTTP requests.
-- **MongoDB** 🍃
-- **GraphQL** 📈
+- **MongoDB**
+- **GraphQL**
 
 ### Frontend
-- **Typescript** 🟦
-- **Svelte & Sveltekit** 🟧
+- **Typescript**
+- **Svelte & Sveltekit**
+
 
 
 ### Docker 🐳
-- **Nginx**: Hosts the frontend inside the Docker image.
+
+Both the frontend and backend are dockerized as part of a CI/CD pipeline.
+
 
 ## 📦 Installation & Usage
 
-### Frontend
+### Run
 
-#### Dev
+Simply use `docker compose` to pull the latest Docker images and run the `web` and `server` containers:
 
-Start the development server
+```bash
+docker compose up -d
+```
+
+Or using `docker run`:
+
+```bash
+docker run -d --name jl8n.dev-web -p 3001:80 ghcr.io/jl8n/jl8n.dev/web:latest
+docker run -d --name jl8n.dev-server -p 3000:3000 ghcr.io/jl8n/jl8n.dev/server:latest
+```
+
+### Dev
+
+Run the Vite development server:
 
 ```bash
 cd web/
 pnpm dev
 ```
 
-#### Run
-
-Pull the Docker image of the latest build
-
-```bash
-docker pull ghcr.io/jl8n/jl8n.dev/web:latest
-```
-
-### Backend
-
-
-#### Dev
-
-To run for development:
+Run the Go API service:
 
 ```bash
 cd /server
 go run *.go
-```
-
-#### Run
-
-Pull the Docker image of the latest build:
-
-```bash
-docker pull ghcr.io/jl8n/jl8n.dev/web:latest
 ```
