@@ -12,15 +12,15 @@ import (
 	"strings"
 )
 
-func getNowPlaying(w http.ResponseWriter) (structs.NowPlaying, error) {
-	url1 := fmt.Sprintf("https://api.listenbrainz.org/1/user/%s/playing-now", lbUser)
+func getNowPlaying() (structs.NowPlaying, error) {
+	apiURL := fmt.Sprintf("https://api.listenbrainz.org/1/user/%s/playing-now", lbUser)
 	client := &http.Client{}
 	nowPlaying := structs.NowPlaying{}
 
-	req, err := http.NewRequest("GET", url1, nil)
+	req, err := http.NewRequest("GET", apiURL, nil)
 	if err != nil {
 		log.Println("Error creating HTTP request: ", err)
-		http.Error(w, "Error creating HTTP request", http.StatusInternalServerError)
+		//http.Error(w, "Error creating HTTP request", http.StatusInternalServerError)
 		return nowPlaying, err
 	}
 
@@ -28,14 +28,14 @@ func getNowPlaying(w http.ResponseWriter) (structs.NowPlaying, error) {
 	res, err := client.Do(req) // send the request
 	if err != nil {
 		log.Println("Error sending HTTP request: ", err)
-		http.Error(w, "Error sending HTTP request", http.StatusInternalServerError)
+		//http.Error(w, "Error sending HTTP request", http.StatusInternalServerError)
 		return nowPlaying, err
 	}
 
 	body, readErr := io.ReadAll(res.Body)
 	if readErr != nil {
 		log.Println("Error reading HTTP response body: ", readErr)
-		http.Error(w, "Error reading HTTP response body", http.StatusInternalServerError)
+		//http.Error(w, "Error reading HTTP response body", http.StatusInternalServerError)
 		return nowPlaying, readErr
 	}
 
@@ -43,7 +43,7 @@ func getNowPlaying(w http.ResponseWriter) (structs.NowPlaying, error) {
 	jsonErr := json.Unmarshal(body, &sbResponse)
 	if jsonErr != nil {
 		log.Println("Error unmarshaling JSON response: ", jsonErr)
-		http.Error(w, "Error parsing `Now Playing` response", http.StatusInternalServerError)
+		//http.Error(w, "Error parsing `Now Playing` response", http.StatusInternalServerError)
 		return nowPlaying, jsonErr
 	}
 
@@ -55,7 +55,6 @@ func getNowPlaying(w http.ResponseWriter) (structs.NowPlaying, error) {
 		return nowPlaying, nil
 	} else {
 		// no song currently playing
-		w.WriteHeader(http.StatusNoContent)
 		return nowPlaying, nil
 	}
 }
