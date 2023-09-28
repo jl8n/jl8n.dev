@@ -41,6 +41,8 @@ docker run -d --name jl8n.dev-web -p 3001:80 ghcr.io/jl8n/jl8n.dev/web:latest
 docker run -d --name jl8n.dev-server -p 3000:3000 ghcr.io/jl8n/jl8n.dev/server:latest
 ```
 
+Then navigate to http://localhost:3001 in a browser.
+
 ### Dev
 
 Run the Vite development server:
@@ -54,5 +56,21 @@ Run the Go API service:
 
 ```bash
 cd /server
-go run *.go
+go run .
+```
+
+### Build
+
+Build the Sveltekit webapp:
+
+```bash
+cd web/
+pnpm run build
+```
+
+Build the Go app backend service:
+
+```bash
+cd server/
+go build
 ```
