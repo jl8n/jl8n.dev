@@ -7,6 +7,7 @@ type NowPlaying struct {
 	Album        string
 	Track        string
 	AlbumMBID    string
+	AlbumArtURL  string
 	ArtAvailable bool
 }
 

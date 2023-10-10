@@ -47,13 +47,18 @@ func main() {
 		MaxAge:           300, // Maximum value not ignored by any of major browsers
 	}))
 
+	// Serve static files from the "album-art" directory
+	fs := http.StripPrefix("/album-art", http.FileServer(http.Dir("./album-art")))
+	r.Handle("/album-art/*", fs)
+
 	r.Get("/nowplaying", func(w http.ResponseWriter, r *http.Request) {
 		flusher, ok := w.(http.Flusher)
 		if !ok {
-			http.Error(w, "Streaming unsupported!", http.StatusInternalServerError)
+			http.Error(w, "Server-sent events are unsupported!", http.StatusInternalServerError)
 			return
 		}
 
+		// prepare http headers for server-sent events
 		w.Header().Set("Content-Type", "text/event-stream")
 		w.Header().Set("Cache-Control", "no-cache")
 		w.Header().Set("Connection", "keep-alive")
@@ -73,12 +78,61 @@ func main() {
 			return
 		}
 
-		// send server-side events to the client
+		// send server-sent events to the client
 		fmt.Fprintf(w, "event: Track\ndata: %s\n\n", nowPlaying.Track)
 		fmt.Fprintf(w, "event: Album\ndata: %s\n\n", nowPlaying.Album)
 		fmt.Fprintf(w, "event: Artist\ndata: %s\n\n", nowPlaying.Artist)
-
 		flusher.Flush()
+
+		// create a channel to receive the album art from the goroutine
+		albumArtChan := make(chan string)
+
+		// search and retrieve album art in a separate thread
+		go func() {
+			path, err := foo2(&nowPlaying)
+			if err != nil {
+				fmt.Println("error in foo2")
+			}
+			// albumMBID, err := findAlbumMatch(&nowPlaying)
+			// if err != nil {
+			// 	albumArtChan <- ""
+			// 	return
+			// }
+			// foo, err := getAlbumArtURL(albumMBID)
+			// if err != nil {
+			// 	fmt.Println("this is foo", foo)
+			// } else {
+			// 	fmt.Println("wtf", err)
+			// }
+
+			albumArtChan <- path
+		}()
+
+		// create a channel to receive the album art
+		//albumArtChan := make(chan string)
+
+		// start a goroutine to fetch and save the album art
+		// go func() {
+		// 	//albumArtURL, err := getAlbumArtTwo(nowPlaying) // replace with your function to get and save the album art
+		// 	if err != nil {
+		// 		albumArtChan <- ""
+		// 		return
+		// 	}
+		// 	// assuming the album name is a unique identifier for the image
+		// 	albumArtURLPath := "/static/" + url.PathEscape(nowPlaying.Album) + ".jpg"
+		// 	albumArtChan <- albumArtURLPath
+		// }()
+
+		// use select to either wait for the album art or timeout after 10 seconds
+		select {
+		case albumArt := <-albumArtChan:
+			if albumArt != "" {
+				fmt.Fprintf(w, "event: AlbumArt\ndata: %s\n\n", albumArt) // send SSE
+				flusher.Flush()
+			}
+		case <-time.After(time.Second * 10):
+			// no album art was found within 10 seconds
+		}
 
 		time.Sleep(time.Second * 10)
 
@@ -87,6 +141,9 @@ func main() {
 		// 	fmt.Fprintf(w, "data: %s\n\n", albumArt)
 		// 	flusher.Flush()
 		// }
+
+		// temp
+
 	})
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
@@ -133,7 +190,7 @@ func main() {
 			return
 		}
 
-		err = downloadAlbumArt(artURL)
+		err = downloadAlbumArt1(artURL)
 		if err != nil {
 			// album art not downloaded - respond with metadata only
 			//  TODO: respond with status indicating that album art is unavailable
@@ -153,7 +210,7 @@ func main() {
 
 	r.Get("/albumart", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("GET /albumart")
-		filename := r.URL.Query().Get("filename")
+		filename := r.URL.Query().Get("filename") // url query parameter
 		if filename == "" {
 			http.Error(w, "filename parameter is required", http.StatusBadRequest)
 			return

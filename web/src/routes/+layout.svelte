@@ -2,21 +2,18 @@
   import Footer from "./Footer.svelte";
 
   /* types */
-  import type { NowPlaying } from "./+layout";
-
-  export let data: NowPlaying;
 </script>
 
 <div class="grid">
   <header>
-    <h1>Josh Layton</h1>
+    <h1>F</h1>
   </header>
 
   <main>
     <slot />
   </main>
 
-  <Footer {data} />
+  <Footer />
 </div>
 
 <style>
@@ -33,8 +30,8 @@
   .grid {
     display: grid;
     grid-template-rows: 35px 1fr 75px;
-    background-color: black;
-    min-height: 100%;
+    background-color: rgb(37, 16, 16);
+    height: 100vh;
   }
 
   header {
@@ -47,11 +44,13 @@
 
   main {
     display: flex;
-    justify-content: center;
-    align-items: center;
   }
 
   h1 {
     margin: 0px;
+  }
+
+  .footer {
+    background-color: aquamarine;
   }
 </style>

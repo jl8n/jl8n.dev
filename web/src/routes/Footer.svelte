@@ -6,6 +6,7 @@
     let track = "";
     let album = "";
     let artist = "";
+    let art = "";
 
     function fetchData() {
         eventSource = new EventSource("http://localhost:3000/nowplaying");
@@ -20,6 +21,10 @@
 
         eventSource.addEventListener("Artist", function (event) {
             artist = event.data;
+        });
+
+        eventSource.addEventListener("AlbumArt", function (event) {
+            art = "http://localhost:3000" + event.data;
         });
     }
 
@@ -67,6 +72,9 @@
                         <img src={Art} alt="Welcome" />
                     </div>
                 {/if} -->
+                <div class="album-art">
+                    <img src={art} alt="Welcome" />
+                </div>
                 <div class="track-info">
                     <div class="track">{track}</div>
                     <div>{artist} &bull; {album}</div>
@@ -89,10 +97,12 @@
         grid-template-columns: auto 3fr auto;
         border-top: 1px solid white;
         align-items: center;
-        margin: 0px 25px;
-        position: sticky;
+        padding: 0px 25px;
+        position: fixed;
         bottom: 0px;
         background-color: black;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     footer > nav {

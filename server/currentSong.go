@@ -9,8 +9,9 @@ import (
 	"net/http"
 )
 
-func sendRequest(url string) (*http.Response, error) {
+func sendListenBrainzReq() (*http.Response, error) {
 	client := &http.Client{}
+	url := fmt.Sprintf("https://api.listenbrainz.org/1/user/%s/playing-now", lbUser)
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
@@ -28,7 +29,7 @@ func sendRequest(url string) (*http.Response, error) {
 	return res, nil
 }
 
-func parseResponse(res *http.Response) (structs.NowPlaying, error) {
+func parseListenBrainzRes(res *http.Response) (structs.NowPlaying, error) {
 	body, readErr := io.ReadAll(res.Body)
 	nowPlaying := structs.NowPlaying{}
 
@@ -57,15 +58,17 @@ func parseResponse(res *http.Response) (structs.NowPlaying, error) {
 }
 
 func getCurrentlyPlayingSong() (structs.NowPlaying, error) {
-	apiURL := fmt.Sprintf("https://api.listenbrainz.org/1/user/%s/playing-now", lbUser)
+	var nowPlaying structs.NowPlaying
 
-	res, _ := sendRequest(apiURL)
+	res, err := sendListenBrainzReq()
+	if err != nil {
+		return nowPlaying, err
+	}
 
+	nowPlaying, err = parseListenBrainzRes(res)
+	if err != nil {
+		return nowPlaying, err
+	}
 
-	nowPlaying, err := parseResponse(res)
-	return nowPlaying, err
-}
-
-func getAlbumArt(song string) string {
-	return "Album Art" // replace with your actual logic
+	return nowPlaying, nil
 }

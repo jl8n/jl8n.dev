@@ -111,7 +111,7 @@ func getFilenameFromURL(rawURL string) (string, error) {
 	return filename, nil
 }
 
-func downloadAlbumArt(artURL string) error {
+func downloadAlbumArt1(artURL string) error {
 	filename, err := getFilenameFromURL(artURL)
 	if err != nil {
 		return errors.New("could not use MBID as filename")
