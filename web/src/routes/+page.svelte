@@ -114,7 +114,7 @@
     </div>
 </section>
 
-<style>
+<style lang="scss">
     h1,
     h2,
     h3,
@@ -129,13 +129,25 @@
 
     .grid {
         display: grid;
-        grid-template-columns: 2fr 1fr;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+
+        @media (min-width: 768px) {
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto;
+        }
     }
 
     .foo {
         text-transform: uppercase;
-        font-size: 6em;
+        font-size: 5em;
         line-height: 1.5em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        @media (min-width: 768px) {
+            font-size: 8em;
+        }
     }
 
     .right {
@@ -145,7 +157,11 @@
     }
 
     .stage {
-        height: 100%;
+        height: 70vh;
+
+        @media (min-width: 768px) {
+            height: 100%;
+        }
     }
 
     article {

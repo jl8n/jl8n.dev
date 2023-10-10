@@ -5,10 +5,9 @@
 </script>
 
 <div class="grid">
-  <header>
-    <h1>F</h1>
+  <header class="mobile-only">
+    <button class="material-icons menu">menu</button>
   </header>
-
   <main>
     <slot />
   </main>
@@ -16,7 +15,7 @@
   <Footer />
 </div>
 
-<style>
+<style lang="scss">
   @font-face {
     font-family: "Space Mono";
     src: url("$lib/fonts/space-mono-v12-latin-regular.woff2") format("woff");
@@ -29,17 +28,8 @@
 
   .grid {
     display: grid;
-    grid-template-rows: 35px 1fr 75px;
-    background-color: rgb(37, 16, 16);
-    height: 100vh;
-  }
-
-  header {
-    display: flex;
-    justify-content: center;
-    position: sticky;
-    top: 0;
-    background-color: aqua;
+    grid-template-rows: 1fr 75px;
+    height: 100%;
   }
 
   main {
@@ -52,5 +42,22 @@
 
   .footer {
     background-color: aquamarine;
+  }
+
+  .mobile-only {
+    display: block;
+
+    @media (min-width: 768px) {
+      display: none;
+    }
+  }
+
+  .menu {
+    font-size: 48px;
+    color: #ffffff;
+    outline: none;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
   }
 </style>

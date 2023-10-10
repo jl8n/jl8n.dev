@@ -39,7 +39,7 @@
 </script>
 
 <footer>
-    <nav>
+    <nav class="desktop-only">
         <a
             href="/"
             aria-current={$page.url.pathname === "/" ? "page" : undefined}
@@ -76,8 +76,8 @@
                     <img src={art} alt="Welcome" />
                 </div>
                 <div class="track-info">
-                    <div class="track">{track}</div>
-                    <div>{artist} &bull; {album}</div>
+                    <div class="trac foo2">{track}</div>
+                    <div class="foo2">{artist} &bull; {album}</div>
                 </div>
             </div>
         {:else}
@@ -85,16 +85,18 @@
         {/if}
     </div>
 
-    <ul class="links">
-        <li><a href="https://github.com/jl8n">github</a></li>
-        <li><a href="mailto:josh.l8n@gmail.com">email</a></li>
-    </ul>
+    <div class="desktop-only">
+        <ul class="links">
+            <li><a href="https://github.com/jl8n">github</a></li>
+            <li><a href="mailto:josh.l8n@gmail.com">email</a></li>
+        </ul>
+    </div>
 </footer>
 
-<style>
+<style lang="scss">
     footer {
         display: grid;
-        grid-template-columns: auto 3fr auto;
+        grid-template-columns: 1fr;
         border-top: 1px solid white;
         align-items: center;
         padding: 0px 25px;
@@ -103,6 +105,10 @@
         background-color: black;
         width: 100%;
         box-sizing: border-box;
+
+        @media (min-width: 768px) {
+            grid-template-columns: auto 3fr auto;
+        }
     }
 
     footer > nav {
@@ -125,6 +131,17 @@
         align-items: center;
         font-size: 0.8em;
         font-weight: 400;
+    }
+
+    .foo2 {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 65vw;
+
+        @media (min-width: 768px) {
+            max-width: 30vw;
+        }
     }
 
     .foo {
@@ -151,7 +168,7 @@
         background-color: pink;
     }
 
-    footer > .links {
+    .links {
         display: flex;
         gap: 25px;
         list-style-type: none;
@@ -159,5 +176,13 @@
 
     nav > a {
         text-decoration: none;
+    }
+
+    .desktop-only {
+        display: none;
+
+        @media (min-width: 768px) {
+            display: block;
+        }
     }
 </style>
