@@ -53,7 +53,7 @@
             <h1 class="foo">python</h1>
         {/if}
     </div>
-    <div class="right">
+    <div>
         <article>
             <p>
                 I'm primarily a full stack developer, but my interests span
@@ -131,6 +131,7 @@
         display: grid;
         grid-template-columns: 1fr;
         grid-template-rows: auto auto;
+        margin-bottom: 50px;
 
         @media (min-width: 768px) {
             grid-template-columns: 1fr 1fr;
@@ -146,14 +147,8 @@
         text-overflow: ellipsis;
 
         @media (min-width: 768px) {
-            font-size: 8em;
+            font-size: 7em;
         }
-    }
-
-    .right {
-        display: grid;
-        grid-template-rows: 50vh 50vh;
-        height: 100%;
     }
 
     .stage {

@@ -1,15 +1,13 @@
 <script lang="ts">
   import Footer from "./Footer.svelte";
-
-  /* types */
 </script>
 
 <div class="grid">
-  <header class="mobile-only">
-    <button class="material-icons menu">menu</button>
-  </header>
+  <header class="mobile-only" />
   <main>
-    <slot />
+    <div class="footer-margin">
+      <slot />
+    </div>
   </main>
 
   <Footer />
@@ -29,19 +27,10 @@
   .grid {
     display: grid;
     grid-template-rows: 1fr 75px;
-    height: 100%;
   }
 
-  main {
-    display: flex;
-  }
-
-  h1 {
-    margin: 0px;
-  }
-
-  .footer {
-    background-color: aquamarine;
+  .footer-margin {
+    margin-bottom: 50px;
   }
 
   .mobile-only {
@@ -52,12 +41,12 @@
     }
   }
 
-  .menu {
-    font-size: 48px;
-    color: #ffffff;
-    outline: none;
-    border: none;
-    background-color: transparent;
-    cursor: pointer;
-  }
+  // .menu {
+  //   font-size: 48px;
+  //   color: #ffffff;
+  //   outline: none;
+  //   border: none;
+  //   background-color: transparent;
+  //   cursor: pointer;
+  // }
 </style>

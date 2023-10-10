@@ -6,6 +6,10 @@ import (
 	"net/http"
 )
 
+// TODO:
+// These functions are used by the /now-playing route (hence the filename)
+// This file should probabaly be renamed and organized differently
+
 func setupHeaders(w http.ResponseWriter) {
 	w.Header().Set("Content-Type", "text/event-stream")
 	w.Header().Set("Cache-Control", "no-cache")

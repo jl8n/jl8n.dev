@@ -97,7 +97,7 @@
     footer {
         display: grid;
         grid-template-columns: 1fr;
-        border-top: 1px solid white;
+        // border-top: 1px solid white;
         align-items: center;
         padding: 0px 25px;
         position: fixed;
@@ -161,6 +161,10 @@
         font-family: "Roboto";
         font-size: 1.1em;
         line-height: 20px;
+    }
+
+    .album-art {
+        display: flex;
     }
 
     .album-art > img {
