@@ -4,13 +4,9 @@ import (
 	"backend/structs"
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
-	"io"
 	"net/http"
 	"net/url"
-	"os"
-	"path/filepath"
 	"strings"
 	"time"
 
@@ -76,7 +72,6 @@ func addToMongo(nowPlaying *structs.NowPlaying) error {
 	fmt.Println("\nattempting to connect")
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel() // Release resources associated with the context
-	fmt.Println("\nsome shit")
 	err = client.Connect(ctx)
 	if err != nil {
 		return err
@@ -111,37 +106,37 @@ func getFilenameFromURL(rawURL string) (string, error) {
 	return filename, nil
 }
 
-func downloadAlbumArt1(artURL string) error {
-	filename, err := getFilenameFromURL(artURL)
-	if err != nil {
-		return errors.New("could not use MBID as filename")
-	}
+// func downloadAlbumArt1(artURL string) error {
+// 	filename, err := getFilenameFromURL(artURL)
+// 	if err != nil {
+// 		return errors.New("could not use MBID as filename")
+// 	}
 
-	// Create the directory if it doesn't exist
-	err = os.MkdirAll("album-art", 0755)
-	if err != nil {
-		return errors.New("could not create directory")
-	}
+// 	// Create the directory if it doesn't exist
+// 	err = os.MkdirAll("album-art", 0755)
+// 	if err != nil {
+// 		return errors.New("could not create directory")
+// 	}
 
-	// Create the empty file on the filesystem
-	out, err := os.Create(filepath.Join("album-art", filename))
-	if err != nil {
-		return errors.New("could not create empty file on filesystem")
-	}
-	defer out.Close()
+// 	// Create the empty file on the filesystem
+// 	out, err := os.Create(filepath.Join("album-art", filename))
+// 	if err != nil {
+// 		return errors.New("could not create empty file on filesystem")
+// 	}
+// 	defer out.Close()
 
-	// Get the data
-	resp, err := http.Get(artURL)
-	if err != nil {
-		return errors.New("could not download album art data")
-	}
-	defer resp.Body.Close()
+// 	// Get the data
+// 	resp, err := http.Get(artURL)
+// 	if err != nil {
+// 		return errors.New("could not download album art data")
+// 	}
+// 	defer resp.Body.Close()
 
-	// Write the body to file
-	_, err = io.Copy(out, resp.Body)
-	if err != nil {
-		return errors.New("could not write album art data to file")
-	}
+// 	// Write the body to file
+// 	_, err = io.Copy(out, resp.Body)
+// 	if err != nil {
+// 		return errors.New("could not write album art data to file")
+// 	}
 
-	return nil
-}
+// 	return nil
+// }

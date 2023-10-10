@@ -13,33 +13,40 @@ import (
 	"strings"
 )
 
-// TODO: check if art exists before downloading
-func downloadAlbumArt(url *string, mbid *string) error {
+func handleDownloadArt(url *string, mbid *string) error {
+	filePath := fmt.Sprintf("./album-art/%s.jpg", *mbid)
+
+	// check if file already exists
+	if _, err := os.Stat(filePath); !os.IsNotExist(err) {
+		fmt.Println("File exists. No need to download.")
+		return nil
+	}
+
+	// send a GET request to the provided url
 	response, err := http.Get(*url)
 	if err != nil {
-		panic(err)
+		return err
 	}
 	defer response.Body.Close()
 
-	file, err := os.Create(fmt.Sprintf("./album-art/%s.jpg", *mbid))
+	// Create a new file in the local filesystem
+	file, err := os.Create(filePath)
 	if err != nil {
-		//panic(err)
 		return err
 
 	}
 	defer file.Close()
 
+	// Copy the response body to the new file
 	_, err = io.Copy(file, response.Body)
 	if err != nil {
-		//panic(err)
-
+		return err
 	}
 
 	return nil
 }
 
 func getAlbumArtURL(mbid string) (string, error) {
-	fmt.Println("fire download2")
 	client := &http.Client{}
 	apiURL := fmt.Sprintf("https://coverartarchive.org/release/%s", mbid)
 
@@ -172,7 +179,7 @@ func findAlbumMatch(nowPlaying *structs.NowPlaying) (string, error) {
 	}
 
 	if err := json.Unmarshal(body, &mbResponse); err != nil {
-		log.Printf("Error unmarshaling JSON response: %v, %s", err, apiURL)
+		log.Printf("Error unmarshaling JSON response: %v, %v", err, apiURL)
 		return "", err
 	}
 
@@ -180,12 +187,12 @@ func findAlbumMatch(nowPlaying *structs.NowPlaying) (string, error) {
 		bestMatchingAlbum := getBestFromSearchResults(&mbResponse, nowPlaying)
 		return bestMatchingAlbum, nil
 	} else {
-		return "", errors.New("No suitable album matches found while searching MusicBrainz")
+		return "", errors.New("no suitable album matches found while searching MusicBrainz")
 	}
 
 }
 
-func foo2(nowPlaying *structs.NowPlaying) (string, error) {
+func downloadAlbumArt(nowPlaying *structs.NowPlaying) (string, error) {
 	mbid, err := findAlbumMatch(nowPlaying)
 	if err != nil {
 		return "", err
@@ -196,17 +203,9 @@ func foo2(nowPlaying *structs.NowPlaying) (string, error) {
 		return "", err
 	}
 
-	err = downloadAlbumArt(&artURL, &mbid)
+	err = handleDownloadArt(&artURL, &mbid)
 	if err != nil {
 		return "", err
 	}
 	return fmt.Sprintf("/album-art/%s.jpg", mbid), nil
 }
-
-// func getAlbumArt(nowPlaying *structs.NowPlaying) {
-// 	matchingMBID, err := findAlbumMatch(nowPlaying)
-// 	if err != nil {
-
-// 	}
-
-// }
