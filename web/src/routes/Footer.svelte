@@ -1,14 +1,45 @@
 <script lang="ts">
     import { page } from "$app/stores";
-    import profile from "$lib/images/pfp.webp";
-    import type { NowPlaying } from "./+layout";
+    import { onMount } from "svelte";
+    let eventSource: EventSource;
 
-    export let data: NowPlaying;
-    const { Artist, Album, Track, Art, ArtAvailable } = data;
+    let track = "";
+    let album = "";
+    let artist = "";
+    let art = "";
+
+    function fetchData() {
+        eventSource = new EventSource("http://localhost:3000/nowplaying");
+
+        eventSource.addEventListener("Track", function (event) {
+            track = event.data;
+        });
+
+        eventSource.addEventListener("Album", function (event) {
+            album = event.data;
+        });
+
+        eventSource.addEventListener("Artist", function (event) {
+            artist = event.data;
+        });
+
+        eventSource.addEventListener("AlbumArt", function (event) {
+            art = "http://localhost:3000" + event.data;
+        });
+    }
+
+    onMount(() => {
+        fetchData();
+        return () => {
+            if (eventSource) {
+                eventSource.close();
+            }
+        };
+    });
 </script>
 
 <footer>
-    <nav>
+    <nav class="desktop-only">
         <a
             href="/"
             aria-current={$page.url.pathname === "/" ? "page" : undefined}
@@ -34,16 +65,19 @@
     </nav>
 
     <div class="now-playing">
-        {#if Track}
+        {#if track}
             <div class="foo">
-                {#if ArtAvailable}
+                <!-- {#if ArtAvailable}
                     <div class="album-art">
                         <img src={Art} alt="Welcome" />
                     </div>
-                {/if}
+                {/if} -->
+                <div class="album-art">
+                    <img src={art} alt="Welcome" />
+                </div>
                 <div class="track-info">
-                    <div class="track">{Track}</div>
-                    <div>{Artist} &bull; {Album}</div>
+                    <div class="trac foo2">{track}</div>
+                    <div class="foo2">{artist} &bull; {album}</div>
                 </div>
             </div>
         {:else}
@@ -51,22 +85,31 @@
         {/if}
     </div>
 
-    <ul class="links">
-        <li><a href="https://github.com/jl8n">github</a></li>
-        <li><a href="mailto:josh.l8n@gmail.com">email</a></li>
-    </ul>
+    <div class="desktop-only">
+        <ul class="links">
+            <li><a href="https://github.com/jl8n">github</a></li>
+            <li><a href="mailto:josh.l8n@gmail.com">email</a></li>
+        </ul>
+    </div>
 </footer>
 
-<style>
+<style lang="scss">
     footer {
-        display: grid;
-        grid-template-columns: auto 3fr auto;
-        border-top: 1px solid white;
-        align-items: center;
-        margin: 0px 25px;
-        position: sticky;
+        position: fixed;
         bottom: 0px;
+        height: 55px;
+        width: 100%;
+        padding: 0px 25px;
+        display: grid;
+        grid-template-columns: 1fr;
+        // border-top: 1px solid white;
+        align-items: center;
         background-color: black;
+        box-sizing: border-box;
+
+        @media (min-width: 768px) {
+            grid-template-columns: auto 3fr auto;
+        }
     }
 
     footer > nav {
@@ -91,15 +134,21 @@
         font-weight: 400;
     }
 
+    .foo2 {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 65vw;
+
+        @media (min-width: 768px) {
+            max-width: 30vw;
+        }
+    }
+
     .foo {
         display: flex;
         gap: 15px;
         align-items: center;
-    }
-
-    .track {
-        font-weight: 600;
-        font-size: 1.1em;
     }
 
     .track-info {
@@ -110,12 +159,16 @@
         line-height: 20px;
     }
 
+    .album-art {
+        display: flex;
+    }
+
     .album-art > img {
         height: 50px;
         background-color: pink;
     }
 
-    footer > .links {
+    .links {
         display: flex;
         gap: 25px;
         list-style-type: none;
@@ -123,5 +176,13 @@
 
     nav > a {
         text-decoration: none;
+    }
+
+    .desktop-only {
+        display: none;
+
+        @media (min-width: 768px) {
+            display: block;
+        }
     }
 </style>

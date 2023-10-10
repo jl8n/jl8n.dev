@@ -1,25 +1,24 @@
 <script lang="ts">
   import Footer from "./Footer.svelte";
-
-  /* types */
-  import type { NowPlaying } from "./+layout";
-
-  export let data: NowPlaying;
+  import Drawer from "../components/LeftDrawer.svelte";
 </script>
 
 <div class="grid">
-  <header>
-    <h1>Josh Layton</h1>
+  <header class="mobile-only">
+    <Drawer />
   </header>
 
   <main>
-    <slot />
+    <div class="footer-margin">
+      <slot />
+    </div>
   </main>
-
-  <Footer {data} />
+  <div class="footer">
+    <Footer />
+  </div>
 </div>
 
-<style>
+<style lang="scss">
   @font-face {
     font-family: "Space Mono";
     src: url("$lib/fonts/space-mono-v12-latin-regular.woff2") format("woff");
@@ -30,28 +29,45 @@
     src: url("$lib/fonts/roboto-v30-latin-regular.woff2") format("woff");
   }
 
-  .grid {
-    display: grid;
-    grid-template-rows: 35px 1fr 75px;
-    background-color: black;
-    min-height: 100%;
-  }
-
   header {
-    display: flex;
-    justify-content: center;
-    position: sticky;
+    position: fixed;
     top: 0;
-    background-color: aqua;
+    width: 100%;
+    height: 42px;
+    background-color: antiquewhite;
   }
 
   main {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    padding-top: 42px;
+
+    @media (min-width: 768px) {
+      padding-top: 0px;
+    }
   }
 
-  h1 {
-    margin: 0px;
+  .grid {
+    display: grid;
+    grid-template-rows: 1fr 75px;
   }
+
+  .footer-margin {
+    margin-bottom: 50px;
+  }
+
+  .mobile-only {
+    display: block;
+
+    @media (min-width: 768px) {
+      display: none;
+    }
+  }
+
+  // .menu {
+  //   font-size: 48px;
+  //   color: #ffffff;
+  //   outline: none;
+  //   border: none;
+  //   background-color: transparent;
+  //   cursor: pointer;
+  // }
 </style>
