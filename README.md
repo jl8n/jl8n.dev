@@ -106,7 +106,7 @@ sequenceDiagram
     Server->>ListenBrainz: 2. GET /playing-now
     ListenBrainz-->>Server: 3. Responds with {track, artist, album}
     Server-->>Client: 4. {track, artist, album} via server-sent event
-    Server->>MusicBrainz: 5. GET /search with {track, artist, album}
+    Server->>MusicBrainz: 5. GET /search using {track, artist, album}
     MusicBrainz-->>Server: 6. Responds with {MBID}
     Server->>CoverArt: 7. GET /release using {MBID}
     CoverArt-->>Server: 8. Responds with {artURL}

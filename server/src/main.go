@@ -42,7 +42,7 @@ func main() {
 	}))
 
 	// Serve static files from the "album-art" directory
-	fs := http.StripPrefix("/album-art", http.FileServer(http.Dir("./album-art")))
+	fs := http.StripPrefix("/album-art", http.FileServer(http.Dir("../album-art")))
 	r.Handle("/album-art/*", fs)
 
 	r.Get("/nowplaying", func(w http.ResponseWriter, r *http.Request) {

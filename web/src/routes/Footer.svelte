@@ -95,15 +95,16 @@
 
 <style lang="scss">
     footer {
+        position: fixed;
+        bottom: 0px;
+        height: 55px;
+        width: 100%;
+        padding: 0px 25px;
         display: grid;
         grid-template-columns: 1fr;
         // border-top: 1px solid white;
         align-items: center;
-        padding: 0px 25px;
-        position: fixed;
-        bottom: 0px;
         background-color: black;
-        width: 100%;
         box-sizing: border-box;
 
         @media (min-width: 768px) {
@@ -148,11 +149,6 @@
         display: flex;
         gap: 15px;
         align-items: center;
-    }
-
-    .track {
-        font-weight: 600;
-        font-size: 1.1em;
     }
 
     .track-info {

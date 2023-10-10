@@ -14,7 +14,7 @@ import (
 )
 
 func handleDownloadArt(url *string, mbid *string) error {
-	filePath := fmt.Sprintf("./album-art/%s.jpg", *mbid)
+	filePath := fmt.Sprintf("../album-art/%s.jpg", *mbid)
 
 	// check if file already exists
 	if _, err := os.Stat(filePath); !os.IsNotExist(err) {

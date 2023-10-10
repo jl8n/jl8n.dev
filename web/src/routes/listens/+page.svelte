@@ -1,12 +1,32 @@
 <script lang="ts">
+    import { onMount } from "svelte";
     import album from "$lib/images/album.jpg";
+
+    let sizes = [
+        "small",
+        "small",
+        "small",
+        "small",
+        "small",
+        "medium",
+        "medium",
+        "large",
+    ];
+    let bricks: string[] = [];
+
+    onMount(() => {
+        // randomize order of sizes
+        bricks = Array.from(
+            { length: 75 },
+            () => sizes[Math.floor(Math.random() * sizes.length)]
+        );
+    });
 </script>
 
 <div class="grid">
-    <h1>Music</h1>
     <div class="wall">
-        {#each { length: 50 } as _, i}
-            <div class="brick">
+        {#each bricks as brick}
+            <div class={`brick ${brick}`}>
                 <img src={album} alt="Album" />
             </div>
         {/each}
@@ -21,28 +41,40 @@
 
     .wall {
         display: grid;
-        grid-auto-flow: dense;
         grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-        justify-items: center;
-        align-items: center;
-        background-size: cover;
-        object-fit: cover;
+        grid-auto-rows: 1fr;
+        grid-auto-flow: dense;
+        grid-gap: 3px; /* This creates a 3px gap */
     }
 
     .brick {
+        position: relative;
+        width: 100%;
+        z-index: -1;
+
+        &:before {
+            content: "";
+            display: block;
+            padding-top: 100%;
+        }
+
         img {
-            max-width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
             height: 100%;
+            object-fit: cover;
         }
+    }
 
-        &:nth-of-type(3n) {
-            grid-row: span 2;
-            grid-column: span 2;
-        }
+    .medium {
+        grid-row: span 2;
+        grid-column: span 2;
+    }
 
-        &:nth-of-type(9n) {
-            grid-row: span 3;
-            grid-column: span 3;
-        }
+    .large {
+        grid-row: span 3;
+        grid-column: span 3;
     }
 </style>

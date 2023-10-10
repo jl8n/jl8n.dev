@@ -1,16 +1,21 @@
 <script lang="ts">
   import Footer from "./Footer.svelte";
+  import Drawer from "../components/LeftDrawer.svelte";
 </script>
 
 <div class="grid">
-  <header class="mobile-only" />
+  <header class="mobile-only">
+    <Drawer />
+  </header>
+
   <main>
     <div class="footer-margin">
       <slot />
     </div>
   </main>
-
-  <Footer />
+  <div class="footer">
+    <Footer />
+  </div>
 </div>
 
 <style lang="scss">
@@ -22,6 +27,22 @@
   @font-face {
     font-family: "Roboto";
     src: url("$lib/fonts/roboto-v30-latin-regular.woff2") format("woff");
+  }
+
+  header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 42px;
+    background-color: antiquewhite;
+  }
+
+  main {
+    padding-top: 42px;
+
+    @media (min-width: 768px) {
+      padding-top: 0px;
+    }
   }
 
   .grid {
