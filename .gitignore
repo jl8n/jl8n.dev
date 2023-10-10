@@ -2,3 +2,4 @@
 !*.secret
 server/.env
 web/src/lib/images/pfp.webp
+server/src/.env
