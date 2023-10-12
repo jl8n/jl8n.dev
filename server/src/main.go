@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -59,7 +60,7 @@ func main() {
 			return
 		}
 
-		setupHeaders(w)
+		setupSSEHeaders(w)
 		getSongAndSendSSE(w, flusher, &nowPlaying)
 
 		// create a channel to receive the album-art URL from the goroutine
@@ -97,6 +98,21 @@ func main() {
 		case <-time.After(time.Second * 10):
 			// no album art was found within 10 seconds
 		}
+	})
+
+	type Response struct {
+		Files []string `json:"files"`
+	}
+
+	r.Get("/art", func(w http.ResponseWriter, r *http.Request) {
+		var res Response
+
+		files, _ := os.ReadDir("../album-art")
+		for _, f := range files {
+			res.Files = append(res.Files, "http://localhost:3000/album-art/"+f.Name())
+		}
+
+		json.NewEncoder(w).Encode(res)
 	})
 
 	// r.Get("/", func(w http.ResponseWriter, r *http.Request) {
