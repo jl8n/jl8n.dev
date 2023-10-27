@@ -39,7 +39,7 @@
         });
 
         eventSource.addEventListener("AlbumArt", function (event) {
-            art = "http://localhost:3000" + event.data;
+            art = `${PUBLIC_BASE_URL}${event.data}`;
         });
     }
 
