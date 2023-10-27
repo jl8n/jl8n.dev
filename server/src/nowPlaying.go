@@ -10,7 +10,7 @@ import (
 // These functions are used by the /now-playing route (hence the filename)
 // This file should probabaly be renamed and organized differently
 
-func setupHeaders(w http.ResponseWriter) {
+func setupSSEHeaders(w http.ResponseWriter) {
 	w.Header().Set("Content-Type", "text/event-stream")
 	w.Header().Set("Cache-Control", "no-cache")
 	w.Header().Set("Connection", "keep-alive")

@@ -1,18 +1,32 @@
 <script lang="ts">
     import { page } from "$app/stores";
     import { onMount } from "svelte";
+    import bars from "$lib/images/bars.svg";
+
     let eventSource: EventSource;
 
     let track = "";
     let album = "";
     let artist = "";
     let art = "";
+    let isDataLoaded = false;
+    let isArtLoaded = false;
+
+    function checkIfLoading() {
+        if (track && artist && album) {
+            isDataLoaded = true;
+        }
+        if (art) {
+            isArtLoaded = true;
+        }
+    }
 
     function fetchData() {
         eventSource = new EventSource("http://localhost:3000/nowplaying");
 
         eventSource.addEventListener("Track", function (event) {
             track = event.data;
+            checkIfLoading();
         });
 
         eventSource.addEventListener("Album", function (event) {
@@ -72,13 +86,23 @@
                         <img src={Art} alt="Welcome" />
                     </div>
                 {/if} -->
-                <div class="album-art">
-                    <img src={art} alt="Welcome" />
-                </div>
-                <div class="track-info">
-                    <div class="trac foo2">{track}</div>
-                    <div class="foo2">{artist} &bull; {album}</div>
-                </div>
+
+                {#if isDataLoaded}
+                    {#if isArtLoaded}
+                        <div class="album-art">
+                            <img src={art} alt="Welcome" />
+                        </div>
+                    {:else}
+                        <div style="width: 50px; height: 50px;" />
+                    {/if}
+
+                    <div class="track-info">
+                        <div class="trac foo2">{track}</div>
+                        <div class="foo2">{artist} &bull; {album}</div>
+                    </div>
+                {:else}
+                    <img src={bars} alt="Bars" width="25" height="25" />
+                {/if}
             </div>
         {:else}
             <div>Josh is currently not listening to music</div>
@@ -165,7 +189,6 @@
 
     .album-art > img {
         height: 50px;
-        background-color: pink;
     }
 
     .links {

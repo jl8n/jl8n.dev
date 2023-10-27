@@ -25,7 +25,7 @@
     menu
 </button>
 
-<div class="drawer" role="dialog" aria-expanded={drawerIsOpen}>
+<div class="drawer" aria-expanded={drawerIsOpen}>
     <button
         type="button"
         class="drawer-close material-symbols-outlined"
@@ -103,15 +103,13 @@
         z-index: 1;
     }
 
-    .drawer-content {
-        margin: 15px;
-    }
-
     nav {
         display: flex;
         flex-direction: column;
         width: 100%;
         font-size: 4em;
+        padding-top: 1em;
+        padding-left: 15px;
     }
 
     nav > a {
@@ -124,10 +122,10 @@
 
     .drawer-close {
         position: absolute;
-        top: 10px;
+        top: 0px;
         right: 10px;
         color: black;
         z-index: 2;
-        margin: 15px;
+        padding: 10px;
     }
 </style>
