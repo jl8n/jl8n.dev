@@ -222,7 +222,7 @@ func main() {
 	// })
 
 	port := 3000
-	fmt.Println("Starting server on port %s")
+	fmt.Printf("Starting server on port %d...\n", port)
 
 	http.ListenAndServe(":3000", r)
 }
