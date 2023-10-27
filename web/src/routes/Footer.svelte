@@ -1,6 +1,7 @@
 <script lang="ts">
     import { page } from "$app/stores";
     import { onMount } from "svelte";
+    import { PUBLIC_BASE_URL } from "$env/static/public";
     import bars from "$lib/images/bars.svg";
 
     let eventSource: EventSource;
@@ -22,7 +23,7 @@
     }
 
     function fetchData() {
-        eventSource = new EventSource("http://localhost:3000/nowplaying");
+        eventSource = new EventSource(`${PUBLIC_BASE_URL}/nowplaying`);
 
         eventSource.addEventListener("Track", function (event) {
             track = event.data;
@@ -38,7 +39,7 @@
         });
 
         eventSource.addEventListener("AlbumArt", function (event) {
-            art = "http://localhost:3000" + event.data;
+            art = `${PUBLIC_BASE_URL}${event.data}`;
         });
     }
 
