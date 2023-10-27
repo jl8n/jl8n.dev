@@ -1,4 +1,5 @@
 // export const prerender = true;  // adapter-static
+export const prerender = true
 
 // export type NowPlaying = {
 //     Artist?: string;

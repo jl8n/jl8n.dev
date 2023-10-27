@@ -31,6 +31,7 @@ func init() {
 }
 
 func main() {
+
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 	r.Use(cors.Handler(cors.Options{
@@ -219,6 +220,9 @@ func main() {
 	// 		}
 	// 	}
 	// })
+
+	port := 3000
+	fmt.Println("Starting server on port %s")
 
 	http.ListenAndServe(":3000", r)
 }
