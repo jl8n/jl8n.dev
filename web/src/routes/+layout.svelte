@@ -1,6 +1,7 @@
 <script lang="ts">
   import Footer from "./Footer.svelte";
   import Drawer from "../components/LeftDrawer.svelte";
+  import Test from "./Test.svelte";
 </script>
 
 <div class="grid">
@@ -10,6 +11,7 @@
 
   <main>
     <div class="footer-margin">
+      <Test />
       <slot />
     </div>
   </main>
