@@ -17,7 +17,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
-var lbToken, lbUser string
+var base_url, lbToken, lbUser string
 
 func init() {
 	err := godotenv.Load()
@@ -25,8 +25,17 @@ func init() {
 		log.Fatal("Error loading environment variables: ", err)
 	}
 
+	// check for a GO_ENV environmental variable set in the production environment
+	// to enable prod mode. Otherwise, default to dev mode
+	env := os.Getenv("GO_ENV")
+	base_url = os.Getenv("DEV_URL")
+	if env == "production" {
+		base_url = os.Getenv("PROD_URL")
+	}
+
 	listenbrainz_token := os.Getenv("LISTENBRAINZ_API_TOKEN")
 	listenbrainz_user := os.Getenv("LISTENBRAINZ_USER")
+
 	lbToken, lbUser = listenbrainz_token, listenbrainz_user
 }
 
@@ -110,8 +119,7 @@ func main() {
 
 		files, _ := os.ReadDir("../album-art")
 		for _, f := range files {
-			// TODO: make this a dynamic URL (localhost in dev, jl8n.dev in prod)
-			res.Files = append(res.Files, "https://api.jl8n.dev/album-art/"+f.Name())
+			res.Files = append(res.Files, base_url+"album-art/"+f.Name())
 		}
 
 		json.NewEncoder(w).Encode(res)

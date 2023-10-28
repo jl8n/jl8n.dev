@@ -18,9 +18,14 @@ RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
 
 ######## Start a new stage from scratch #######
 FROM alpine:latest  
-
 WORKDIR /root/app
+
+# Since the development environment expects album-art/ to be outside src/ (aunt/uncle)
+# the same directory structure needs to be maintained here too
 RUN mkdir /root/album-art
+
+# Set the GO_ENV environment variable to "production"
+ENV GO_ENV=production
 
 # Copy only the executable from the first stage.
 COPY --from=builder /app/main .
