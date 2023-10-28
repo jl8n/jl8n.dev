@@ -46,6 +46,7 @@
 </script>
 
 <div class="grid">
+    URL: {PUBLIC_BASE_URL}
     <div class="wall">
         {#each bricks as brick, index (index)}
             <div class={`brick ${brick.size}`}>
