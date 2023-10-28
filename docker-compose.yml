@@ -6,7 +6,9 @@ services:
     image: ghcr.io/jl8n/jl8n.dev/web:latest
     container_name: jl8n.dev-web
     ports:
-      - 3001:80
+      - 3333:80
+    volumes:
+      - ./server/album-art:/root/album-art
 
   jl8n.dev-server:
     image: ghcr.io/jl8n/jl8n.dev/server:latest
