@@ -1,5 +1,6 @@
 <script lang="ts">
     import { onMount } from "svelte";
+    import { PUBLIC_BASE_URL } from "$env/static/public";
 
     // frequency of size is the chance an image will be that size
     // 5 `small` out of 8 total means there's a 5/8 chance of small
@@ -24,7 +25,7 @@
 
         console.log(sizeArray);
 
-        const res = await fetch("http://localhost:3000/art");
+        const res = await fetch(`${PUBLIC_BASE_URL}/art`);
         if (res.ok) {
             const resData = await res.json();
             const fileURLs = resData.files;
