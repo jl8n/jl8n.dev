@@ -110,7 +110,8 @@ func main() {
 
 		files, _ := os.ReadDir("../album-art")
 		for _, f := range files {
-			res.Files = append(res.Files, "http://localhost:3000/album-art/"+f.Name())
+			// TODO: make this a dynamic URL (localhost in dev, jl8n.dev in prod)
+			res.Files = append(res.Files, "https://api.jl8n.dev/album-art/"+f.Name())
 		}
 
 		json.NewEncoder(w).Encode(res)
