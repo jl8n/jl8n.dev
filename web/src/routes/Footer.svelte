@@ -13,6 +13,7 @@
     let isDataLoaded = false;
     let isArtLoaded = false;
 
+
     function checkIfLoading() {
         if (track && artist && album) {
             isDataLoaded = true;
@@ -51,6 +52,11 @@
             }
         };
     });
+
+    function animateFooter() {
+        footer.style.transition = "bottom 0.5s ease-in-out";
+        footer.style.bottom = "100vh";
+    }
 </script>
 
 <footer>

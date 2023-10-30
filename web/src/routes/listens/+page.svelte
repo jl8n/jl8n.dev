@@ -16,6 +16,16 @@
     ];
     let bricks: { size: string; url: string }[] = [];
 
+    function handleImageLoad(event: Event) {
+        const loadingImage = event.target as HTMLImageElement;
+        loadingImage.classList.add("loaded");
+        loadingImage.classList.remove("loading");
+    }
+
+    function shuffleBricks() {
+        bricks = [...bricks.sort(() => Math.random() - 0.5)];
+    }
+
     onMount(async () => {
         // randomize order of sizes
         const sizeArray = Array.from(
@@ -46,11 +56,16 @@
 </script>
 
 <div class="grid">
-    URL: {PUBLIC_BASE_URL}
     <div class="wall">
+        <button on:click={shuffleBricks} />
         {#each bricks as brick, index (index)}
             <div class={`brick ${brick.size}`}>
-                <img src={brick.url} alt="Album" />
+                <img
+                    src={brick.url}
+                    alt="Album"
+                    class="loading"
+                    on:load={handleImageLoad}
+                />
             </div>
         {/each}
     </div>
@@ -60,6 +75,31 @@
     .grid {
         height: 100%;
         width: 100%;
+    }
+
+    img {
+        z-index: 0;
+    }
+
+    img.loading {
+        opacity: 0;
+    }
+
+    .loaded {
+        opacity: 0;
+        animation-name: fadeIn;
+        animation-duration: 0.5s;
+        animation-timing-function: ease-in-out;
+        animation-fill-mode: forwards;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
     }
 
     .wall {
@@ -91,24 +131,6 @@
             transition: transform 0.3s ease;
             z-index: 1;
         }
-    }
-
-    .back {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: black;
-    }
-
-    .brick.expanded {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 10000;
     }
 
     .medium {

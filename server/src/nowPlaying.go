@@ -17,7 +17,7 @@ func setupSSEHeaders(w http.ResponseWriter) {
 }
 
 func getSongAndSendSSE(w http.ResponseWriter, flusher http.Flusher, nowPlaying *structs.NowPlaying) {
-	fmt.Printf("%s - %s - %s\n", nowPlaying.Artist, nowPlaying.Track, nowPlaying.Album)
+	//fmt.Printf("%s - %s - %s\n", nowPlaying.Artist, nowPlaying.Track, nowPlaying.Album)
 
 	if nowPlaying.Track == "" {
 		fmt.Fprintf(w, "data: %s\n\n", "No song is currently playing")
@@ -25,7 +25,7 @@ func getSongAndSendSSE(w http.ResponseWriter, flusher http.Flusher, nowPlaying *
 		return
 	}
 
-	// send server-sent events to the client
+	// send server-sent events to the client by writing to w
 	fmt.Fprintf(w, "event: Track\ndata: %s\n\n", nowPlaying.Track)
 	fmt.Fprintf(w, "event: Album\ndata: %s\n\n", nowPlaying.Album)
 	fmt.Fprintf(w, "event: Artist\ndata: %s\n\n", nowPlaying.Artist)
