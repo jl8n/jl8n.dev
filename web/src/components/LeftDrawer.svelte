@@ -21,7 +21,11 @@
     });
 </script>
 
-<button on:click={toggleDrawer} type="button" class="material-symbols-outlined">
+<button
+    on:click={toggleDrawer}
+    type="button"
+    class="menu-button material-symbols-outlined"
+>
     menu
 </button>
 

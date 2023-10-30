@@ -14,7 +14,8 @@ import (
 )
 
 func handleDownloadArt(url *string, mbid *string) error {
-	filePath := fmt.Sprintf("../album-art/%s.jpg", *mbid)
+	fileDir := "../album-art"
+	filePath := fmt.Sprintf("%s/%s.jpg", fileDir, *mbid)
 
 	// check if file already exists
 	if _, err := os.Stat(filePath); !os.IsNotExist(err) {
@@ -25,23 +26,34 @@ func handleDownloadArt(url *string, mbid *string) error {
 	// send a GET request to the provided url
 	response, err := http.Get(*url)
 	if err != nil {
+		fmt.Println("Error: Sending GET request to fetch album art")
 		return err
 	}
 	defer response.Body.Close()
 
-	// Create a new file in the local filesystem
+	// create album-art directory if it doesn't already exist
+	err = os.MkdirAll(fileDir, 0755)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// create a new file in the album-art directory
 	file, err := os.Create(filePath)
 	if err != nil {
+		fmt.Println("Error: Can't create a new file on the OS")
 		return err
 
 	}
 	defer file.Close()
 
-	// Copy the response body to the new file
+	// copy the response body to the new file
 	_, err = io.Copy(file, response.Body)
 	if err != nil {
+		fmt.Println("Error: Can't populate the response body to a new file")
 		return err
 	}
+
+	fmt.Println("Album art downloaded filePath")
 
 	return nil
 }
@@ -136,7 +148,7 @@ func getBestFromSearchResults(mbResponse *structs.MBAlbumInfo, nowPlaying *struc
 		}
 	}
 
-	fmt.Println("winner", winnerIndex, mbResponse.Releases[winnerIndex].ID)
+	fmt.Println("Album Art MBID:", mbResponse.Releases[winnerIndex].ID)
 
 	return mbResponse.Releases[winnerIndex].ID
 
