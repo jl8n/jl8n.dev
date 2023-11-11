@@ -1,7 +1,11 @@
 name: Build Project
 
 # only run on closed pull requests
-on: 
+on:
+  # pushing to main is temporary - will rebase from other branches in the future
+  push:
+    branches:
+      - main
   pull_request_target:
     types:
       - closed
