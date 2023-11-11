@@ -35,6 +35,7 @@
 
         console.log(sizeArray);
 
+        //const res = await fetch(`${PUBLIC_BASE_URL}/art`);
         const res = await fetch(`${PUBLIC_BASE_URL}/art`);
         if (res.ok) {
             const resData = await res.json();

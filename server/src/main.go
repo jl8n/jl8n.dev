@@ -33,6 +33,8 @@ func init() {
 		base_url = os.Getenv("PROD_URL")
 	}
 
+	fmt.Printf("API accessible at %s\n", base_url)
+
 	listenbrainz_token := os.Getenv("LISTENBRAINZ_API_TOKEN")
 	listenbrainz_user := os.Getenv("LISTENBRAINZ_USER")
 
@@ -121,6 +123,8 @@ func main() {
 		for _, f := range files {
 			res.Files = append(res.Files, base_url+"album-art/"+f.Name())
 		}
+
+		fmt.Printf("FIRE /art - %s\n", base_url)
 
 		json.NewEncoder(w).Encode(res)
 	})

@@ -1,18 +1,6 @@
 <script lang="ts">
-  import { onMount } from "svelte";
   import Footer from "./Footer.svelte";
   import Drawer from "../components/LeftDrawer.svelte";
-
-  let footer: HTMLElement;
-
-  onMount(() => {
-    footer.style.bottom = "0px";
-  });
-
-  function animateFooter() {
-    footer.style.transition = "bottom 0.5s ease-in-out";
-    footer.style.bottom = "100vh";
-  }
 </script>
 
 <div class="grid">
