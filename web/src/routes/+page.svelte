@@ -1,35 +1,8 @@
 <script lang="ts">
     import profile from "$lib/images/pfp.webp";
-
-    interface Language {
-        name: string;
-        frameworks: string[];
-    }
+    import TabContainer from "../components/TabContainer.svelte";
 
     let currentSelection: string = "home";
-    let languages = [
-        {
-            name: "home",
-            frameworks: [],
-        },
-        {
-            name: "c++",
-            frameworks: [],
-        },
-        {
-            name: "python",
-            frameworks: [],
-        },
-        {
-            name: "javascript / typescript",
-            frameworks: ["node", "vue", "sveltekit"],
-        },
-    ];
-
-    function onLanguageClick(language: Language) {
-        currentSelection = language.name;
-        console.log("fire", language);
-    }
 </script>
 
 <section class="grid">
@@ -53,64 +26,13 @@
             <h1 class="foo">python</h1>
         {/if}
     </div>
+
     <div>
         <article>
-            <p>
-                I'm primarily a full stack developer, but my interests span
-                everything from embedded sytems to dev-ops.
-            </p>
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Condimentum lacinia quis vel eros donec. Egestas fringilla
-                phasellus faucibus scelerisque eleifend donec pretium vulputate
-                sapien. Massa tincidunt dui ut ornare lectus sit amet. Rhoncus
-                est pellentesque elit ullamcorper dignissim cras tincidunt
-                lobortis feugiat. Malesuada proin libero nunc consequat interdum
-                varius sit. Ornare suspendisse sed nisi lacus sed. Aliquam
-                faucibus purus in massa tempor nec. Phasellus faucibus
-                scelerisque eleifend donec pretium. At elementum eu facilisis
-                sed odio morbi. Praesent elementum facilisis leo vel fringilla
-                est. Duis at consectetur lorem donec massa sapien faucibus et.
-                Tortor condimentum lacinia quis vel eros donec. Ultrices gravida
-                dictum fusce ut placerat orci nulla pellentesque dignissim. Sed
-                vulputate mi sit amet. Leo vel orci porta non pulvinar neque. Eu
-                ultrices vitae auctor eu augue ut lectus arcu bibendum. Purus
-                semper eget duis at tellus. Augue neque gravida in fermentum et
-                sollicitudin ac orci. Pharetra sit amet aliquam id diam maecenas
-                ultricies mi eget. Ac tortor vitae purus faucibus ornare.
-                Interdum velit laoreet id donec. Dictum non consectetur a erat
-                nam at lectus. Libero justo laoreet sit amet cursus sit amet
-                dictum sit. Amet volutpat consequat mauris nunc congue nisi
-                vitae suscipit tellus.
-            </p>
+            <TabContainer />
         </article>
 
-        <article>
-            <h3>Languages</h3>
-            <ul>
-                {#each languages as language (language)}
-                    <li>
-                        <button
-                            on:click={() => onLanguageClick(language)}
-                            class="language"
-                        >
-                            {language.name}
-                        </button>
-                    </li>
-                {/each}
-            </ul>
 
-            <h3>Technologies</h3>
-            <ul>
-                <li>linux</li>
-                <li>dev-ops</li>
-                <li>docker</li>
-                <li>CI/CD</li>
-                <li>git</li>
-                <li>security</li>
-            </ul>
-        </article>
     </div>
 </section>
 
@@ -163,12 +85,6 @@
         overflow: auto;
         text-align: justify;
         padding: 15px;
-    }
-
-    ul {
-        gap: 10px;
-        list-style: none;
-        margin: 0px;
     }
 
     .language {
